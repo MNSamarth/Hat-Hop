@@ -31,7 +31,7 @@ namespace HatHop
             }
             GUI.Box(new Rect(12, 12, width, 150), GUIContent.none);
             GUI.Label(new Rect(24, 20, width - 24, 136),
-                "HAT HOP\nA / D steer | Space big hop | R restart\n" +
+                "HAT HOP\nA / D move | Space jump | R restart\n" +
                 "Reach GREEN. Avoid RED.\n" + status +
                 $"\nDeaths: {flow.Deaths}    Flips: {rotation.CompletedTurns}", label);
 
