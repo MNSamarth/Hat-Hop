@@ -21,9 +21,9 @@ First prove one room. Then expand to one short level with several traversal sect
 | Agreed | Initial traversal is upward; flipping creates downward traversal. |
 | Agreed | Both longitudinal ends have lethal boundaries. |
 | Initial tuning | Roughly two seconds of warning; around three or four flip opportunities in a level. |
-| Prototype default | A fresh Space press within 0.2 seconds before takeoff replaces one small hop with one big jump. Holding Space does not repeat it. |
+| Prototype default | Comfort revision for playtesting: a fresh Space press queues one big jump until the next supported takeoff, with no expiry. Multiple presses do not stack; holding Space does not repeat it. Reset and suspension clear the queue. |
 | Prototype default | Player position rotates around the map center with the map; player remains upright. Gravity remains screen-down. |
-| Prototype default | Freeze gameplay physics during the turn, animate for 0.6 seconds, clear velocity and buffered input, then resume. |
+| Prototype default | Freeze gameplay physics during the turn, animate for 0.6 seconds, clear velocity and queued input, then resume. |
 | Prototype default | R restarts; fixed overview camera; solid two-sided platforms. |
 
 Do not present provisional rules as user-confirmed decisions. Change them after an observed playtest problem and record the reason.
@@ -50,7 +50,7 @@ This repository is an importable starter, not a complete Editor-generated Unity 
 3. Open the repository root through Unity Hub. Let Unity generate/import metadata. Resolve any Console errors before continuing.
 4. Choose **Hat Hop > Create Movement Test Scene**. The tool prompts before discarding unsaved scene edits and before replacing its test scene.
 5. It creates a camera, MapRoot with ground and three platforms, a blue player, and a movement-test component. The player has Rigidbody2D, BoxCollider2D and PlayerMotor2D. The tool saves Assets/HatHop/Scenes/MovementTest.unity.
-6. Enter Play Mode: A/D steers, Space just before landing makes one bigger jump, R restores the starting position. Falling below the test area also resets. This fallback reset is a test helper, not the final death system.
+6. Enter Play Mode: A/D steers, Space at any point queues one bigger takeoff at the next landing, R restores the starting position. Falling below the test area also resets. This fallback reset is a test helper, not the final death system.
 7. Run the checks in section 11, record results in Docs/PROGRESS.md, then commit the scene, sprite and all generated .meta files.
 
 ## 5. Scene and component architecture
@@ -65,7 +65,7 @@ This repository is an importable starter, not a complete Editor-generated Unity 
 | Player outside MapRoot | Dynamic Rigidbody2D, frozen Z rotation, collider, motor. |
 | Main Camera outside MapRoot | Orthographic, fixed overview for the first room. |
 | Canvas and EventSystem outside MapRoot | Controls, warning countdown, win/restart feedback; stay upright. |
-| PlayerMotor2D | Input capture, air steering, contact-based launch, jump buffering, suspension/reset hooks. Implemented in starter. |
+| PlayerMotor2D | Input capture, air steering, contact-based launch, a single pending jump request, suspension/reset hooks. Implemented in starter. |
 | MovementTestSession | Temporary R/fall reset for the movement room. Implemented in starter. |
 | RotationController | Traversal → Warning → Turning → Traversal state machine. Planned. |
 | RotationScheduler | Requests a turn only when eligible; constrained randomness after deterministic testing. Planned. |
@@ -78,9 +78,9 @@ Use layers Player, Solid, Hazard and Goal when implementing the full room. Hazar
 
 Read key events in Update; apply Rigidbody2D velocity in FixedUpdate. Ground support must have an upward contact normal, not just any collision or a ray touching a wall. Reject launch while ascending to prevent stale landing contacts from double-launching. Use collision detection and interpolation on the player. Never drive active Rigidbody2D movement by editing its transform every frame.
 
-Starting tuning: horizontal speed 4.5 units/s, small takeoff speed 4, big takeoff speed 8, gravity scale 2, buffer 0.2 seconds, minimum ground-normal Y 0.65. With default gravity magnitude 9.81, approximate hop heights are 0.41 and 1.63 units. These are tuning estimates, not verified reachability guarantees; account for collider dimensions, fixed timestep and clearance. The generated room uses approximately one-unit rises.
+Starting tuning: horizontal speed 4.5 units/s, small takeoff speed 4, big takeoff speed 8, gravity scale 2, minimum ground-normal Y 0.65. With default gravity magnitude 9.81, approximate hop heights are 0.41 and 1.63 units. These are tuning estimates, not verified reachability guarantees; account for collider dimensions, fixed timestep and clearance. The generated room uses approximately one-unit rises.
 
-Small hops launch without input. Space is consumed once on takeoff or expires; it does not apply midair thrust. A/D gives immediate air control; releasing stops horizontal velocity in this first version. Simultaneous A and D cancel. Reassess momentum only after testing this baseline.
+Small hops launch without input. Space queues one request, consumed once on takeoff or cleared by reset/suspension; it does not apply midair thrust. A/D gives immediate air control; releasing stops horizontal velocity in this first version. Simultaneous A and D cancel. Reassess momentum only after testing this baseline.
 
 ## 7. Rotation implementation contract
 
@@ -89,7 +89,7 @@ Build rotation only after movement passes. Start with a predictable interval and
 1. Warning begins only during active traversal. Display the same countdown used by the controller; leave movement enabled for preparation.
 2. At countdown completion, suspend the motor and store the initial player position and map orientation. Disable player physics simulation during the animation. Block death/win trigger processing while turning.
 3. Animate map angle and player position from the stored initial values, never by repeated incremental rotation. For pivot C, player P and angle theta, use P_new = C + R(theta) * (P - C). Keep player art upright.
-4. Snap to the exact final orientation (0 or 180 degrees). Synchronize transforms before collision queries. Restore Rigidbody2D position explicitly, clear velocity and buffered input, then resume simulation and input at a physics boundary.
+4. Snap to the exact final orientation (0 or 180 degrees). Synchronize transforms before collision queries. Restore Rigidbody2D position explicitly, clear velocity and queued input, then resume simulation and input at a physics boundary.
 5. Validate overlap before resuming. An upright rectangular collider does not preserve its swept shape at intermediate angles; collisions are intentionally disabled during the turn. At a 180-degree endpoint a centered symmetric box should preserve clearance. If invalid overlap remains, report it as a level/rotation bug and reset safely; do not silently move the player through geometry.
 6. Reset must cancel an active turn, warning and schedule, restore the original map pose, respawn the player, reset progress and UI, and clear velocity. Never let a stale coroutine finish after reset.
 
@@ -144,7 +144,7 @@ Do not run this against a nonempty repository without first fetching and reconci
 
 | Target | Milestone | Exit condition |
 | --- | --- | --- |
-| Sep 25 | Movement | Stable small hops, steering and one buffered big jump. |
+| Sep 25 | Movement | Stable small hops, steering and one queued big jump. |
 | Sep 26 | Deterministic rotation | Warning, 180-degree map/player transition and clean reset. |
 | Sep 28 | Complete room and first Web build | Hazards, exit and both traversal directions work; hosted build loads. |
 | Sep 30 | Fairness and constrained random timing | Reproducible seeds, playtest revisions and accurate contribution log. |
@@ -161,8 +161,8 @@ For Web delivery, add the playable scene to the build scene list and install mat
 - [ ] Import and compile with no Console errors in the chosen Editor.
 - [ ] On flat ground, 30 seconds of continuous small hops without input.
 - [ ] A/D steers during hops; no separate ground-walking phase.
-- [ ] One Space press just before landing causes one larger takeoff.
-- [ ] Held Space never repeats big jumps; an early expired press does not trigger later.
+- [ ] One Space press early or late in a hop causes one larger takeoff at the next landing while holding A/D.
+- [ ] Held Space never repeats big jumps; multiple presses before landing produce only one big takeoff.
 - [ ] Walls and platform undersides do not launch a hop.
 - [ ] Each test platform is reachable; edge landings do not produce repeated impulses.
 - [ ] R/fall reset clears velocity and queued jump.
@@ -198,3 +198,7 @@ After each feature, state exactly what changed, what was actually tested, remain
 - Unity Web deployment and compression: https://docs.unity3d.com/6000.0/Documentation/Manual/webgl-deploying.html
 
 Consult documentation matching the pinned Editor. These references support implementation; they are not the three-game research required for the assignment.
+
+## Movement comfort revision
+
+The first user playtest confirmed scene generation, automatic hopping and steering. A 0.2-second jump buffer felt unreliable; extending it to 0.5 seconds helped but did not fully resolve comfort. The next test replaces expiry with one queued jump until landing. This changes a provisional input rule; a jump still launches only from a surface. It removes lost early presses, but it does not remove the wait until landing. Current revision awaits a user Play Mode test.

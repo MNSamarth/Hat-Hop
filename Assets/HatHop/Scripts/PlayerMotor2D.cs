@@ -11,12 +11,11 @@ namespace HatHop
         [SerializeField, Min(0)] private float horizontalSpeed = 4.5f;
         [SerializeField, Min(0)] private float smallHopSpeed = 4f;
         [SerializeField, Min(0)] private float bigHopSpeed = 8f;
-        [SerializeField, Min(0)] private float jumpBufferSeconds = 0.2f;
         [SerializeField, Range(0, 1)] private float minimumGroundNormal = 0.65f;
         private readonly ContactPoint2D[] contacts = new ContactPoint2D[16];
         private Rigidbody2D body;
         private float steer;
-        private float jumpExpiresAt = float.NegativeInfinity;
+        private bool bigJumpQueued;
         private bool suspended;
 
         private void Awake() => body = GetComponent<Rigidbody2D>();
@@ -36,7 +35,8 @@ namespace HatHop
             steer = 0;
             bool bigPressed = false;
 #endif
-            if (bigPressed) jumpExpiresAt = Time.time + jumpBufferSeconds;
+            // Remember one request until landing; multiple presses do not stack.
+            if (bigPressed) bigJumpQueued = true;
         }
 
         private void FixedUpdate()
@@ -47,8 +47,8 @@ namespace HatHop
             // Ascending bodies may retain contacts from the previous simulation step.
             if (velocity.y <= 0.05f && HasSupport())
             {
-                velocity.y = Time.time <= jumpExpiresAt ? bigHopSpeed : smallHopSpeed;
-                jumpExpiresAt = float.NegativeInfinity;
+                velocity.y = bigJumpQueued ? bigHopSpeed : smallHopSpeed;
+                bigJumpQueued = false;
             }
             WriteVelocity(velocity);
         }
@@ -65,7 +65,7 @@ namespace HatHop
         {
             suspended = value;
             steer = 0;
-            jumpExpiresAt = float.NegativeInfinity;
+            bigJumpQueued = false;
             WriteVelocity(Vector2.zero);
         }
 
