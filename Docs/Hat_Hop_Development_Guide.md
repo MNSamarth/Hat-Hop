@@ -1,204 +1,169 @@
 # Hat Hop Unity Development Guide
 
-Working reference for CSCI 526, USC. Updated September 24, 2026.
-Read this file before changing gameplay. The supplied Hat Hop Design Reference and explicit user decisions establish the design; this guide turns them into implementation steps. This is a project reference, not an installed AI skill.
+Working reference for USC CSCI 526. Updated September 24, 2026.
+
+Read this guide and PROGRESS.md before changing the project. The latest explicit user decisions take priority over the supplied design reference. In particular, grounded movement with visual hopping now replaces automatic physical hopping. Earlier milestone documents are historical records.
 
 ## 1. Goal and scope
 
-Build a small 2D vertical platformer in Unity: steer a continuously hopping rabbit toward an exit while warned, game-controlled 180-degree map flips turn climbs into dangerous descents. The greybox must communicate this through movement, geometry and feedback without story or art.
+Build a 2D vertical platformer where warned, game-controlled 180-degree map rotations turn climbs into controlled descents. The rabbit escaping a magician's hat is the theme; movement and level geometry must communicate the game without story, elaborate art or cutscenes.
 
-First prove one room. Then expand to one short level with several traversal sections. Browser WebGL on GitHub Pages is the delivery target. No enemies, inventory, collectibles, combat, fall damage or special platform types in the initial scope. Use self-created geometry; external assets are outside the assignment rules recorded in the reference.
+First validate the revised movement and closer camera in the existing GameplayTest. Then create larger Easy, Medium and Hard levels and simple menus. Browser Web builds on GitHub Pages remain the delivery target. Public deployment is deferred until the movement and game are ready; the initial local browser build has passed according to the user.
 
-## 2. Decisions and provisional rules
+Avoid enemies, inventory, combat, collectibles, fall damage and new platform mechanics unless playtests establish a need. Use self-created assets under the assignment requirements recorded in the design reference.
+
+## 2. Current gameplay rules
 
 | Status | Rule |
 | --- | --- |
-| Agreed | A/D steers; there is no ground walking. |
-| Agreed | Landing automatically launches a small hop. |
-| Agreed | Space enables a larger jump. |
-| Agreed | Game controls rotation; the player cannot trigger it in the final game. |
-| Agreed | Background, tiles, hazards and goal rotate together by 180 degrees. |
-| Agreed | Initial traversal is upward; flipping creates downward traversal. |
-| Agreed | Both longitudinal ends have lethal boundaries. |
-| Initial tuning | Roughly two seconds of warning; around three or four flip opportunities in a level. |
-| Prototype default | Comfort revision for playtesting: a fresh Space press queues one big jump until the next supported takeoff, with no expiry. Multiple presses do not stack; holding Space does not repeat it. Reset and suspension clear the queue. |
-| Prototype default | Player position rotates around the map center with the map; player remains upright. Gravity remains screen-down. |
-| Prototype default | Freeze gameplay physics during the turn, animate for 0.6 seconds, clear velocity and queued input, then resume. |
-| Prototype default | R restarts; fixed overview camera; solid two-sided platforms. |
+| Agreed revision | A/D moves the grounded collision body and steers it in the air. |
+| Agreed revision | Small hops are visual animation only. The collision body stays grounded until a real jump or fall. |
+| Agreed revision | Space starts a real jump immediately when grounded. No midair double jump. |
+| Starting tuning | A 0.12-second landing buffer and 0.08-second edge grace forgive slightly mistimed input. Holding Space does not repeat jumps. |
+| Agreed | Game controls 180-degree rotation. No player rotation button in the finished game. |
+| Agreed | Background, platforms, goal and hazards rotate together; both longitudinal ends are lethal. |
+| Tested prototype default | Player position rotates with the map, character stays upright, gravity remains screen-down. |
+| Tested prototype default | Freeze physics during the 0.6-second turn, clear velocity/input, and refresh contacts before movement resumes. |
+| Current deterministic test | Six seconds traversal and two seconds warning, then one turn. Random scheduling comes later. |
+| Agreed revision | Camera follows the body at approximately 2x the former overview magnification, remains upright and keeps the player visible during rotation. |
+| Implemented loop | Red kills, green wins, death auto-respawns after 0.6 seconds, R fully restarts. Death takes priority over goal in the same physics step. |
 
-Do not present provisional rules as user-confirmed decisions. Change them after an observed playtest problem and record the reason.
+Numerical values remain tuning choices. Do not silently restore the obsolete automatic physics hop or indefinite jump queue.
 
-## 3. Environment and dependencies
+## 3. Environment and setup
 
-The user's installed Editor version has not been supplied. The starter targets Unity 6 APIs and includes a velocity compatibility branch for older Editors; compatibility still requires an actual import test. Do not upgrade an existing project silently.
+- Editor: Unity 6.3 LTS, **6000.3.23f1**. Both teammates should use this exact version.
+- Template: **2D Built-In Render Pipeline**. Windows development machine; matching Web support installed.
+- Repository: https://github.com/MNSamarth/Hat-Hop.git
+- Scripts support Unity Input System when enabled, otherwise legacy input. Inspect Packages and Player settings before changing the backend.
+- No third-party runtime package is required for the current mechanics.
+- Use Visible Meta Files and Force Text asset serialization; commit Assets metadata, Packages and ProjectSettings.
 
-1. Use the same exact Editor version on both teammates' machines; record it below after creating the project.
-2. Create a 2D Built-In Render Pipeline project for this initial starter. If using Universal 2D, first verify that the generated sprite is visible with that pipeline.
-3. Install the Web Build Support module for that Editor through Unity Hub.
-4. Use C# in an IDE with Unity integration. No third-party runtime packages are needed for this milestone.
-5. Starter input supports the Input System when enabled and legacy input otherwise. When using Input System, install it through Package Manager. When using legacy input, enable Input Manager (Old) or Both in Player settings. Do not switch systems mid-milestone.
-6. Editor settings: Visible Meta Files and Force Text asset serialization. Commit the generated ProjectSettings and Packages, including the package lock.
+The user's local project contains Editor-generated settings and scenes. The authoring workspace contains source scaffolding and does not automatically mirror those local files or the latest GitHub commits. Inspect a current checkout before a merge or scene replacement. Do not fabricate project settings or claim Unity testing from static source inspection.
 
-Environment record: Editor **pending**; template **proposed 2D Built-In**; input backend **pending**; OS **pending**; remote URL **pending**.
+For the current revision, follow MOVEMENT_CAMERA_UPDATE.md: import the patch, open GameplayTest, use Hat Hop > Apply Movement and Camera Update outside Play Mode, and save. Preserve existing .meta files when replacing scripts. Do not recreate the project or regenerate a customized scene.
 
-## 4. Start the supplied movement milestone
+## 4. Scene architecture
 
-This repository is an importable starter, not a complete Editor-generated Unity project. It intentionally does not fabricate ProjectSettings or a package manifest for an unknown Editor.
-
-1. Clone or extract the starter to a working folder. Create a new Unity project in a separate temporary folder using your chosen Editor.
-2. Close Unity. Copy the generated Assets, Packages and ProjectSettings into this repository root, merging Assets and preserving Assets/HatHop. Do not copy Library or the temporary project's Git metadata.
-3. Open the repository root through Unity Hub. Let Unity generate/import metadata. Resolve any Console errors before continuing.
-4. Choose **Hat Hop > Create Movement Test Scene**. The tool prompts before discarding unsaved scene edits and before replacing its test scene.
-5. It creates a camera, MapRoot with ground and three platforms, a blue player, and a movement-test component. The player has Rigidbody2D, BoxCollider2D and PlayerMotor2D. The tool saves Assets/HatHop/Scenes/MovementTest.unity.
-6. Enter Play Mode: A/D steers, Space at any point queues one bigger takeoff at the next landing, R restores the starting position. Falling below the test area also resets. This fallback reset is a test helper, not the final death system.
-7. Run the checks in section 11, record results in Docs/PROGRESS.md, then commit the scene, sprite and all generated .meta files.
-
-## 5. Scene and component architecture
-
-| Object or script | Responsibility |
+| Object or component | Responsibility |
 | --- | --- |
-| MapRoot at (0,0,0), unit scale | Pivot for the complete room, including all traversable geometry. |
-| MapRoot/Background | Self-created visual backdrop; no gameplay collision. |
-| MapRoot/Platforms | Solid BoxCollider2D surfaces, initially without individual rigidbodies. |
-| MapRoot/Hazards | Visible lethal triggers at both ends and only where descent needs them. |
-| MapRoot/Exit | Trigger in a side alcove; rotates with the map. |
-| Player outside MapRoot | Dynamic Rigidbody2D, frozen Z rotation, collider, motor. |
-| Main Camera outside MapRoot | Orthographic, fixed overview for the first room. |
-| Canvas and EventSystem outside MapRoot | Controls, warning countdown, win/restart feedback; stay upright. |
-| PlayerMotor2D | Input capture, air steering, contact-based launch, a single pending jump request, suspension/reset hooks. Implemented in starter. |
-| MovementTestSession | Temporary R/fall reset for the movement room. Implemented in starter. |
-| RotationController | Traversal → Warning → Turning → Traversal state machine. Planned. |
-| RotationScheduler | Requests a turn only when eligible; constrained randomness after deterministic testing. Planned. |
-| LevelFlow | Death, full reset, win and state priority. Planned. |
-| WarningUI | Presents authoritative controller countdown; does not maintain its own timer. Planned. |
+| MapRoot | Fixed pivot with unit scale; parents background, platforms, hazards and exit. |
+| Player root outside MapRoot | Dynamic Rigidbody2D, centered symmetric collider, PlayerMotor2D. |
+| Player/Visual | SpriteRenderer and cosmetic local movement; no collider or Rigidbody2D. |
+| PlayerHopVisual | Applies cosmetic hopping only while grounded and active. |
+| Main Camera outside MapRoot | Orthographic camera plus PlayerFollowCamera. |
+| PlayerMotor2D | Update input, FixedUpdate velocity, grounded contact checks, one real jump, buffer/grace and reset/suspend hooks. |
+| RotationController | Traversal, Warning, Turning and Resuming phases. Optional external lifecycle mode. |
+| LevelFlow | Playing, Dead and Won states; death/goal arbitration; respawn and full restart. |
+| LevelTrigger2D | Hazard/goal reports restricted to the configured player body. |
+| GameplayHUD | Temporary upright controls, countdown, outcomes and restart button. |
+| RotationScheduler, planned | Seeded, constrained timing after level design passes deterministic tests. |
 
-Use layers Player, Solid, Hazard and Goal when implementing the full room. Hazards and Goal are triggers; they must never count as grounded surfaces. Keep collision rules explicit. Start with ordinary boxes; a tilemap and Cinemachine are unnecessary dependencies for this scope.
+MovementTest, RotationTest and GameplayTest are separate scenes. Updating shared scripts affects all scenes using them. Never promise an old scene retains old movement behavior merely because its scene file is unchanged.
 
-## 6. Movement implementation contract
+Use solid two-sided platforms and ordinary BoxCollider2D geometry initially. Hazard and goal colliders are triggers and must never provide ground support. Explicit layers can be added when needed; the current trigger code identifies the configured Rigidbody2D directly.
 
-Read key events in Update; apply Rigidbody2D velocity in FixedUpdate. Ground support must have an upward contact normal, not just any collision or a ray touching a wall. Reject launch while ascending to prevent stale landing contacts from double-launching. Use collision detection and interpolation on the player. Never drive active Rigidbody2D movement by editing its transform every frame.
+## 5. Movement and camera contracts
 
-Starting tuning: horizontal speed 4.5 units/s, small takeoff speed 4, big takeoff speed 8, gravity scale 2, minimum ground-normal Y 0.65. With default gravity magnitude 9.81, approximate hop heights are 0.41 and 1.63 units. These are tuning estimates, not verified reachability guarantees; account for collider dimensions, fixed timestep and clearance. The generated room uses approximately one-unit rises.
+Read fresh key presses in Update. Apply velocity in FixedUpdate. Ground support requires an upward contact normal and a nonascending body; a wall or ceiling is not ground. A/D has direct horizontal control and releasing it stops horizontal motion in this prototype. Gravity remains physical. Space requires support or the brief edge grace and consumes one request. Clear jump input and support history after launch, reset and rotation suspension.
 
-Small hops launch without input. Space queues one request, consumed once on takeoff or cleared by reset/suspension; it does not apply midair thrust. A/D gives immediate air control; releasing stops horizontal velocity in this first version. Simultaneous A and D cancel. Reassess momentum only after testing this baseline.
+Preserve scene tuning when renaming serialized fields. The new Jump Speed migrates from Big Hop Speed using FormerlySerializedAs. Starting values are horizontal speed 4.5, jump speed 8, gravity scale 2 and minimum ground-normal Y 0.65. At default gravity magnitude 9.81, theoretical maximum jump rise is approximately 1.63 units. Layout must leave clearance and a margin rather than using this as a guaranteed platform gap.
 
-## 7. Rotation implementation contract
+Cosmetic hopping moves only the Visual child. Default height is 0.12 world units and period 0.32 seconds; animation continues at idle when grounded and stops during real jumps, suspension or finished runs. Keep it small enough that collision behavior remains visually understandable. The player's root collision box stays still while idle.
 
-Build rotation only after movement passes. Start with a predictable interval and an Editor-only debug trigger; defer randomness.
+The camera follows the player root, never Visual. Halving orthographic size gives 2x linear magnification at a fixed aspect ratio: GameplayTest's size 10 becomes 5. Preserve the original reference size so repeated setup is idempotent. Start with modest velocity-based look-ahead and smoothing; directly track the player during rotation and snap after reset. Do not zoom out to reveal the whole route automatically. The closer camera does not guarantee the exit is always hidden; placement and layout must support discovery while preserving readable landings.
 
-1. Warning begins only during active traversal. Display the same countdown used by the controller; leave movement enabled for preparation.
-2. At countdown completion, suspend the motor and store the initial player position and map orientation. Disable player physics simulation during the animation. Block death/win trigger processing while turning.
-3. Animate map angle and player position from the stored initial values, never by repeated incremental rotation. For pivot C, player P and angle theta, use P_new = C + R(theta) * (P - C). Keep player art upright.
-4. Snap to the exact final orientation (0 or 180 degrees). Synchronize transforms before collision queries. Restore Rigidbody2D position explicitly, clear velocity and queued input, then resume simulation and input at a physics boundary.
-5. Validate overlap before resuming. An upright rectangular collider does not preserve its swept shape at intermediate angles; collisions are intentionally disabled during the turn. At a 180-degree endpoint a centered symmetric box should preserve clearance. If invalid overlap remains, report it as a level/rotation bug and reset safely; do not silently move the player through geometry.
-6. Reset must cancel an active turn, warning and schedule, restore the original map pose, respawn the player, reset progress and UI, and clear velocity. Never let a stale coroutine finish after reset.
+## 6. Rotation and lifecycle contracts
 
-Use an explicit state or session-generation token to prevent stale events. Death takes priority over exit if both occur in the same simulation step. Winning stops scheduling and motion. R works during warning, turning, death and win. Pause countdown on application focus loss if playtesting shows browser focus causes unfair deaths.
+1. Warning begins only in active traversal. Movement stays enabled throughout the warning; UI reads the controller's authoritative timer.
+2. Suspend the motor and simulation for the turn. Animate from stored initial positions: P_new = C + R(theta) * (P - C). Do not accumulate incremental transforms.
+3. Keep the character and camera upright. Snap map orientation to exactly 0 or 180 degrees at endpoints.
+4. Restore the player pose, clear velocity/input, synchronize transforms and check solid overlap. A meaningful invalid penetration is a logged bug with a safe reset, not permission to teleport through geometry.
+5. Refresh physics contacts before resuming the motor. Externally requested resets must also preserve this refresh step.
+6. LevelFlow handles reset input in gameplay scenes; standalone RotationController handles it in the rotation test. Never attach two competing reset owners.
+7. Resolve pending trigger outcomes before the next rotation update. Death wins over goal in the same physics step. Ignore contacts during frozen turns, and accept valid contacts after resume.
+8. Death and win halt simulation and scheduling through the controller's halt method. Do not disable the controller to implement win; its OnDisable performs cleanup.
+9. Manual R clears all run state and counters. Auto-respawn preserves death count. No stale delayed respawn or turn may fire after a restart.
 
-## 8. Timing and level design
+## 7. Three-level design plan
 
-Design ascent and descent together. Use staggered solid platforms and alternating openings to interrupt a straight fall; put the exit away from a direct drop path. Avoid one-way platforms until their flipped behavior is deliberately designed.
+All levels should be larger than the original compact test room. Build Easy first; do not freeze all three layouts before validating the revised jump and viewport.
 
-Measure progress in the original map's local coordinates, using MapRoot.InverseTransformPoint(player.position). Track the maximum achieved progress so repeated crossings do not retrigger bands. Initially use fixed test sequences. Later use single-use bands, seeded delays and a minimum gap, and cancel pending requests on reset/win. Store the seed in debug logs. Random timing must never override the warning or create overlapping turns.
+| Level | Starting scope | Learning or challenge |
+| --- | --- | --- |
+| Easy | Three traversal sections, broad landings, generous preparation spots, simple side-alcove exit. | Understand movement, warning and ascent/descent transitions. |
+| Medium | Five sections, alternating routes, narrower landings, visible interior hazards. | Choose routes that remain useful after the next rotation. |
+| Hard | Seven sections, offset platforms, fewer safe preparation choices, more demanding exit approach. | Combine precise movement, controlled descent and preparation. |
 
-A two-second warning needs a reachable preparation option with the current hop timing. Test warnings during small hops, big jumps, edge departures and descent. Do not assume randomness is fair because there is a countdown. If fair options cannot be designed for a band, move or remove that band.
+Section counts are planning targets, not committed geometry or guaranteed duration. Tune section dimensions from measured jump reach and the new camera view. Keep platforms reachable with margin, break straight falls with staggered surfaces and make the same exit accessible in either orientation. Test warnings during jumps, edge departures and descent. Never use offscreen lethal surprises as a substitute for difficulty.
+
+After deterministic layouts pass, schedule single-use progress bands in original map-local coordinates. Track maximum progress, use reproducible seeds, enforce a minimum gap and never overlap warnings/turns. If a band cannot offer a fair preparation route within the warning, relocate or remove it. The initial three/four-flip idea remains tunable per level.
+
+## 8. Menus and level progression plan
+
+Still to implement: a main menu with Play, Level Select and Controls; in-game Restart and Main Menu; completion options Next Level, Retry and Main Menu. Hard should show completion instead of a nonexistent next level. Define scene names and build-list order explicitly. Any pause flow must freeze gameplay timers and restore time on restart or scene change. Keep implementation details out of the player's UI.
 
 ## 9. Git workflow
 
-The starter has a local Git history on main. No remote has been created or pushed. Use the user's real Git identity for future commits. Initial automated commits use a neutral repository-local identity only when none is configured; replace it before human work.
-
-Commit Assets and every corresponding .meta file, Packages, ProjectSettings, Docs, .gitignore and .gitattributes. Never commit Library, Temp, Obj, Logs, UserSettings, generated builds, IDE caches, credentials or Unity license files. Move assets inside Unity so GUIDs survive.
-
-Before working:
+Work on a feature branch based on the latest tested checkpoint. The user has pushed gameplay and Web settings and reports merging through the GUI. Check current branch and history before further merges; do not assume the authoring checkout has those remote commits.
 
 ```sh
 git status
+git branch --show-current
+git fetch origin
+```
+
+For a new feature starting from updated main, after the working tree is clean:
+
+```sh
 git switch main
-git pull --ff-only
-git switch -c feature/rotation
+git pull --ff-only origin main
+git switch -c feature/your-feature
 ```
 
-The pull command requires a configured remote/upstream. Save Unity assets before inspecting and committing:
+For the current movement revision, stay on the existing feature/movement-camera branch. Save scenes outside Play Mode, then:
 
 ```sh
-git diff --check
-git status --short
-git add Assets Packages ProjectSettings Docs
-git diff --cached --stat
-git commit -m "Add warned deterministic room rotation"
-git push -u origin feature/rotation
+git add Assets/HatHop Docs
+git --no-pager diff --cached --stat
+git diff --cached --check
+git commit -m "Describe the behavior changed"
+git push -u origin HEAD
 ```
 
-Use small commits with a purpose and validation note. Agree on scene ownership before simultaneous edits; use separate test scenes/prefabs for parallel features. Do not hand-resolve conflicting GUIDs casually. Keep main importable and playable once the first Unity gate passes. Merge reviewed branches, then delete completed branches. Do not force-push shared history.
+Include package/settings changes explicitly when relevant. Commit Assets and corresponding .meta files, Packages including its lock, ProjectSettings and Docs. Ignore Library, Temp, Obj, Logs, UserSettings, Builds, IDE caches and generated solution files. Never overwrite another working .git directory or force-push shared history. Move assets in Unity to preserve GUIDs. Agree on ownership of shared scenes; use separate scenes or prefabs for concurrent work. Merge tested features into main and use real human Git identities for human commits. Track actual contributions accurately.
 
-To connect an empty remote after creating it under the correct account:
+## 10. Current milestone order and delivery
 
-```sh
-git remote add origin YOUR_REPOSITORY_URL
-git push -u origin main
-```
+1. Revised grounded movement, visual hopping and closer camera.
+2. Build and playtest Easy with the new movement and visibility.
+3. Build Medium and Hard from the tested movement ranges.
+4. Add menu and level progression.
+5. Tune timing, difficulty and presentation, then publish.
 
-Do not run this against a nonempty repository without first fetching and reconciling its history. No public/private visibility choice has been made. GitHub Pages availability depends on the account/repository configuration; verify access before submission.
+Completed user-reported checkpoints: initial movement, rotation, gameplay loop and a localhost Web build. Public hosting is deferred by user preference. Rebuild after code/scene changes; pushing C# source alone does not update a hosted game. Publish generated build files separately, for example in gh-pages, and configure Pages to that output. Build into ignored Builds/Web. Start with disabled compression or configure decompression fallback if the host cannot provide required headers. Serve via HTTP/HTTPS and verify the actual hosted URL, keyboard focus, full loop and restart. GitHub Actions Unity build automation is optional later work, not configured.
 
-## 10. Milestones and delivery
+The design reference records submission on October 2, 2026 at 12:59 PM, via Brightspace and Discord, with GitHub Pages hosting and a video under one minute. Reserve time on October 1 for submission checks. Confirm current course announcements before final delivery. Still required: three researched genre games, actual Week 3 matrix columns, diagram, final controls, repository/build/video links and truthful contribution/AI records. This development guide is not the final graded design document. User reports this year's TA/grader guidance permits complete AI use.
 
-| Target | Milestone | Exit condition |
-| --- | --- | --- |
-| Sep 25 | Movement | Stable small hops, steering and one queued big jump. |
-| Sep 26 | Deterministic rotation | Warning, 180-degree map/player transition and clean reset. |
-| Sep 28 | Complete room and first Web build | Hazards, exit and both traversal directions work; hosted build loads. |
-| Sep 30 | Fairness and constrained random timing | Reproducible seeds, playtest revisions and accurate contribution log. |
-| Oct 1 | Submission package | Working links, final descriptive document and video under one minute. |
+## 11. Acceptance gates
 
-The supplied reference records an October 2, 2026, 12:59 PM deadline, Brightspace and Discord submission, and GitHub Pages hosting rather than Unity Play. Confirm against the course's current announcement before final delivery.
+- Revised movement: presses during all cosmetic-hop phases work; held Space does not repeat; no double jump, wall jump or wall sticking; reset clears pending input.
+- Visual/camera: body grounded while sprite hops; camera does not bob with sprite; 2x view remains readable; player visible through turn and reset.
+- Rotation: exactly one warned half-turn, correct endpoints, no clipping/impulses, reliable full reset.
+- Lifecycle: lethal ends, deterministic death priority, clean respawn, win freezes the run, all restart paths work.
+- Levels: reachable in both orientations; descent requires deliberate landings; preparation options are visible and reachable.
+- Menus: each level loads and returns correctly; final level completes; no timer/input leakage across scenes.
+- Delivery: fresh clone opens with matching Editor; hosted browser handles controls, death, win and restart; all submission links work.
 
-For Web delivery, add the playable scene to the build scene list and install matching Web Build Support. Build into an ignored Builds/Web folder. Start with compression disabled to simplify the initial hosting check; later use compression with decompression fallback if the host cannot provide required encoding headers. Test via HTTP/HTTPS, not by opening index.html as a local file. Publish build output separately from source with GitHub Pages; do not upload Unity caches. Add a .nojekyll file to the published output when using branch-based Pages. Verify the actual hosted URL, browser keyboard focus, restart and complete win loop. Record Editor version, commit and build date. Do not claim a successful deployment until the hosted build has been played.
+Record what was actually tested, where and by whom. Source authored is not source compiled, and a compile is not a playtest. Earlier user tests do not establish that the current revision passes.
 
-## 11. Acceptance and regression checklist
+## 12. AI collaboration rules and references
 
-### Movement gate
+Read guide and progress, inspect existing code and settings, and implement one milestone at a time. Preserve latest agreed behavior; label proposed changes. Provide exact menu/component setup and focused Play Mode checks. Keep components small and references explicit. Record bugs and decisions after tests; never invent contributions or fill checklists from assumptions. Keep private discussion out of shared files.
 
-- [ ] Import and compile with no Console errors in the chosen Editor.
-- [ ] On flat ground, 30 seconds of continuous small hops without input.
-- [ ] A/D steers during hops; no separate ground-walking phase.
-- [ ] One Space press early or late in a hop causes one larger takeoff at the next landing while holding A/D.
-- [ ] Held Space never repeats big jumps; multiple presses before landing produce only one big takeoff.
-- [ ] Walls and platform undersides do not launch a hop.
-- [ ] Each test platform is reachable; edge landings do not produce repeated impulses.
-- [ ] R/fall reset clears velocity and queued jump.
-
-### Rotation and room gate
-
-- [ ] Exactly one warning and turn per scheduled opportunity.
-- [ ] Player, map, goal and hazards reach expected endpoints; UI stays upright.
-- [ ] No launch spikes or clipping on physics resume.
-- [ ] Restart halfway through warning/turn fully restores the initial state.
-- [ ] Big jumps during warnings retain a fair survival option.
-- [ ] Exit reachable in each orientation; an uncontrolled straight fall cannot win.
-- [ ] Death/exit priority is deterministic; win stops further turns.
-- [ ] Same random seed reproduces a reported schedule.
-
-### Delivery gate
-
-- [ ] Fresh clone imports using the recorded Editor; metadata and package lock are committed.
-- [ ] Actual hosted browser build accepts input and completes/restarts.
-- [ ] No editor-only debug controls or Console errors in release.
-- [ ] Final document includes three researched games, actual course matrix columns, diagram, controls, repository/build/video links and actual contributions.
-- [ ] AI assistance recorded. User reports current TA/grader guidance permits complete AI use.
-
-## 12. Collaboration and AI working rules
-
-Read this guide and PROGRESS.md before coding. Inspect existing scripts and scene setup before adding replacements. Preserve agreed mechanics and label proposed changes. Use the recorded Editor's APIs; consult official Unity docs when uncertain. Implement one milestone at a time and explain each script's attachment point and Inspector settings. Favor short components with explicit references over frameworks or global managers.
-
-After each feature, state exactly what changed, what was actually tested, remaining risks and the next action. Code written is not code compiled; a compile is not a playtest. Update progress and decisions after tests. Never invent teammate contributions or mark an unchecked acceptance item complete. Keep personal discussion out of shared project files. Both teammates should own meaningful code and design tasks; the ownership split in the design reference remains a proposal.
-
-## 13. Technical references
-
-- Unity Rigidbody2D contacts: https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Rigidbody2D.GetContacts.html
-- Unity Web deployment and compression: https://docs.unity3d.com/6000.0/Documentation/Manual/webgl-deploying.html
-
-Consult documentation matching the pinned Editor. These references support implementation; they are not the three-game research required for the assignment.
-
-## Movement comfort revision
-
-The first user playtest confirmed scene generation, automatic hopping and steering. A 0.2-second jump buffer felt unreliable; extending it to 0.5 seconds helped but did not fully resolve comfort. The next test replaces expiry with one queued jump until landing. This changes a provisional input rule; a jump still launches only from a surface. It removes lost early presses, but it does not remove the wait until landing. Current revision awaits a user Play Mode test.
+Official references matching the target Editor:
+- https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Camera-orthographicSize.html
+- https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Serialization.FormerlySerializedAsAttribute.html
+- https://docs.unity3d.com/6000.3/Documentation/Manual/2d-physics/physics-material-2d-reference.html
+- https://docs.unity3d.com/6000.3/Documentation/ScriptReference/MonoBehaviour.OnTriggerStay2D.html
+- https://docs.unity3d.com/6000.3/Documentation/Manual/webgl-deploying.html
