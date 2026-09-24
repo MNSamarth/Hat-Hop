@@ -13,6 +13,7 @@ namespace HatHop
 
         [SerializeField] private Transform mapRoot;
         [SerializeField] private PlayerMotor2D player;
+        [SerializeField] private bool managedByLevel;
         [SerializeField, Min(0.1f)] private float traversalSeconds = 6f;
         [SerializeField, Min(0.1f)] private float warningSeconds = 2f;
         [SerializeField, Min(0.1f)] private float turnSeconds = 0.6f;
@@ -31,16 +32,21 @@ namespace HatHop
         private bool flipped;
         private bool resetRequested;
         private bool initialized;
+        private bool halted;
+        private bool deferResumeOneStep;
+        public bool IsInitialized => initialized;
+        public bool IsHalted => halted;
         public Phase CurrentPhase { get; private set; }
         public int CompletedTurns { get; private set; }
         public float WarningRemaining => Mathf.Max(0f, warningSeconds - elapsed);
         public float UntilWarning => Mathf.Max(0f, traversalSeconds - elapsed);
 
         // Called only by the Editor scene builder; Inspector references are serialized.
-        public void Configure(Transform map, PlayerMotor2D motor)
+        public void Configure(Transform map, PlayerMotor2D motor, bool externalLifecycle = false)
         {
             mapRoot = map;
             player = motor;
+            managedByLevel = externalLifecycle;
         }
 
         private void Start()
@@ -64,6 +70,7 @@ namespace HatHop
 
         private void Update()
         {
+            if (managedByLevel) return;
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
                 resetRequested = true;
@@ -80,7 +87,15 @@ namespace HatHop
                 ResetRoom();
                 return;
             }
-            if (CurrentPhase != Phase.Turning &&
+            // A reset requested by LevelFlow happens before our FixedUpdate.
+            // Leave one simulation step for the teleported body to refresh contacts.
+            if (deferResumeOneStep)
+            {
+                deferResumeOneStep = false;
+                return;
+            }
+            if (halted) return;
+            if (!managedByLevel && CurrentPhase != Phase.Turning &&
                 Vector2.Distance(body.position, initialMapPosition) > resetDistance)
             {
                 ResetRoom();
@@ -179,9 +194,29 @@ namespace HatHop
             return true;
         }
 
+        // LevelFlow calls these at a physics boundary. Keep the component enabled:
+        // disabling it invokes OnDisable's cleanup and would unfreeze a finished run.
+        public void HaltForOutcome()
+        {
+            if (!initialized) return;
+            halted = true;
+            player.SetSuspended(true);
+            body.angularVelocity = 0;
+            body.simulated = false;
+        }
+
+        public void RestartFromLevel()
+        {
+            if (!initialized) return;
+            ResetRoom();
+            deferResumeOneStep = true;
+        }
+
         private void ResetRoom()
         {
             resetRequested = false;
+            halted = false;
+            deferResumeOneStep = false;
             player.SetSuspended(true);
             body.simulated = false;
             body.interpolation = RigidbodyInterpolation2D.None;
