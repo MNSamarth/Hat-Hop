@@ -124,7 +124,82 @@
       "exitX": 5.8,
       "exitFloorY": 7.76,
       "exitWidth": 2.4,
-      "exitHeight": 2.4
+      "exitHeight": 2.4,
+      "pockets": [
+        {
+          "name": "Flip Star Pocket 1",
+          "anchor": 2,
+          "x": 6.6,
+          "y": -5.66,
+          "width": 2.0,
+          "height": 3.6
+        },
+        {
+          "name": "Flip Star Pocket 2",
+          "anchor": 8,
+          "x": -6.6,
+          "y": 0.94,
+          "width": 2.0,
+          "height": 3.6
+        }
+      ],
+      "bonusPlatforms": [
+        {
+          "name": "Pocket 1 Recovery",
+          "x": 4.95,
+          "y": -8.96,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 1 Return Step",
+          "x": 2.5,
+          "y": -7.96,
+          "width": 1.4,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 2 Recovery",
+          "x": -4.95,
+          "y": -2.36,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 2 Return Step",
+          "x": -2.5,
+          "y": -1.36,
+          "width": 1.4,
+          "height": 0.28
+        }
+      ],
+      "stars": [
+        {
+          "name": "Route Star 1",
+          "x": 0,
+          "y": -6.86
+        },
+        {
+          "name": "Route Star 2",
+          "x": 3.8,
+          "y": 3.04
+        },
+        {
+          "name": "Flip Star 1",
+          "x": 6.6,
+          "y": -2.61
+        },
+        {
+          "name": "Flip Star 2",
+          "x": -6.6,
+          "y": 3.99
+        },
+        {
+          "name": "Exit Approach Star",
+          "x": 0,
+          "y": 7.14
+        }
+      ]
     },
     {
       "key": "Medium",
@@ -166,7 +241,8 @@
           "x": 4.6,
           "y": -9.46,
           "width": 2.2,
-          "height": 0.28
+          "height": 0.28,
+          "redUnderside": true
         },
         {
           "name": "Landing 04",
@@ -250,7 +326,8 @@
           "x": 4.6,
           "y": 4.94,
           "width": 2.2,
-          "height": 0.28
+          "height": 0.28,
+          "redUnderside": true
         },
         {
           "name": "Landing 16",
@@ -297,13 +374,6 @@
           "height": 1.05
         },
         {
-          "name": "Edge Hazard 07",
-          "x": -6.0,
-          "y": -4.11,
-          "width": 0.6,
-          "height": 1.05
-        },
-        {
           "name": "Edge Hazard 11",
           "x": -6.0,
           "y": 0.6900000000000001,
@@ -321,14 +391,89 @@
       "exitX": 5.5,
       "exitFloorY": 12.06,
       "exitWidth": 2.4,
-      "exitHeight": 2.4
+      "exitHeight": 2.4,
+      "pockets": [
+        {
+          "name": "Flip Star Pocket 1",
+          "anchor": 6,
+          "x": -7.1,
+          "y": -4.96,
+          "width": 2.0,
+          "height": 3.6
+        },
+        {
+          "name": "Flip Star Pocket 2",
+          "anchor": 9,
+          "x": 7.1,
+          "y": -1.33,
+          "width": 2.0,
+          "height": 3.6
+        }
+      ],
+      "bonusPlatforms": [
+        {
+          "name": "Pocket 1 Recovery",
+          "x": -5.45,
+          "y": -8.26,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 1 Return Step",
+          "x": -3.0,
+          "y": -7.26,
+          "width": 1.4,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 2 Recovery",
+          "x": 5.45,
+          "y": -4.63,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 2 Return Step",
+          "x": 3.0,
+          "y": -3.63,
+          "width": 1.4,
+          "height": 0.28
+        }
+      ],
+      "stars": [
+        {
+          "name": "Route Star 1",
+          "x": -1.4,
+          "y": -11.03
+        },
+        {
+          "name": "Route Star 2",
+          "x": -1.4,
+          "y": 3.37
+        },
+        {
+          "name": "Flip Star 1",
+          "x": -7.1,
+          "y": -1.91
+        },
+        {
+          "name": "Flip Star 2",
+          "x": 7.1,
+          "y": 1.72
+        },
+        {
+          "name": "Exit Approach Star",
+          "x": -1.4,
+          "y": 11.34
+        }
+      ]
     },
     {
       "key": "Hard",
       "title": "THE LAST ACT",
       "sections": 7,
       "roomWidth": 20,
-      "roomHeight": 42.96,
+      "roomHeight": 44.34,
       "traversalSeconds": 6,
       "warningSeconds": 2.0,
       "accent": [
@@ -340,65 +485,67 @@
         {
           "name": "Start",
           "x": -4.5,
-          "y": -18.98,
+          "y": -19.67,
           "width": 2.45,
           "height": 0.28
         },
         {
           "name": "Landing 01",
           "x": -1.5,
-          "y": -17.67,
+          "y": -18.36,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 02",
           "x": 1.5,
-          "y": -16.42,
+          "y": -17.11,
           "width": 1.65,
           "height": 0.28
         },
         {
           "name": "Landing 03",
           "x": 4.5,
-          "y": -15.14,
+          "y": -15.83,
           "width": 1.75,
-          "height": 0.28
+          "height": 0.28,
+          "redUnderside": true
         },
         {
           "name": "Landing 04",
           "x": 1.5,
-          "y": -13.86,
+          "y": -14.55,
           "width": 2.45,
           "height": 0.28
         },
         {
           "name": "Landing 05",
           "x": -1.5,
-          "y": -12.55,
+          "y": -13.24,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 06",
           "x": -4.5,
-          "y": -11.3,
+          "y": -11.99,
           "width": 1.65,
           "height": 0.28
         },
         {
           "name": "Landing 07",
           "x": -1.5,
-          "y": -10.02,
+          "y": -10.71,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 08",
           "x": 1.5,
-          "y": -8.74,
-          "width": 2.45,
-          "height": 0.28
+          "y": -9.43,
+          "width": 4.6,
+          "height": 0.28,
+          "seesaw": true
         },
         {
           "name": "Landing 09",
@@ -447,7 +594,8 @@
           "x": 4.5,
           "y": 0.22,
           "width": 1.75,
-          "height": 0.28
+          "height": 0.28,
+          "redUnderside": true
         },
         {
           "name": "Landing 16",
@@ -481,62 +629,64 @@
           "name": "Landing 20",
           "x": 1.5,
           "y": 6.62,
-          "width": 2.45,
-          "height": 0.28
+          "width": 4.6,
+          "height": 0.28,
+          "seesaw": true
         },
         {
           "name": "Landing 21",
           "x": 4.5,
-          "y": 7.93,
+          "y": 8.62,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 22",
           "x": 1.5,
-          "y": 9.18,
+          "y": 9.87,
           "width": 1.65,
           "height": 0.28
         },
         {
           "name": "Landing 23",
           "x": -1.5,
-          "y": 10.46,
+          "y": 11.15,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 24",
           "x": -4.5,
-          "y": 11.74,
+          "y": 12.43,
           "width": 2.45,
           "height": 0.28
         },
         {
           "name": "Landing 25",
           "x": -1.5,
-          "y": 13.05,
+          "y": 13.74,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 26",
           "x": 1.5,
-          "y": 14.3,
+          "y": 14.99,
           "width": 1.65,
           "height": 0.28
         },
         {
           "name": "Landing 27",
           "x": 4.5,
-          "y": 15.58,
+          "y": 16.27,
           "width": 1.75,
-          "height": 0.28
+          "height": 0.28,
+          "redUnderside": true
         },
         {
           "name": "Landing 28",
           "x": 1.5,
-          "y": 16.86,
+          "y": 17.55,
           "width": 2.45,
           "height": 0.28
         }
@@ -545,14 +695,7 @@
         {
           "name": "Edge Hazard 03",
           "x": 6.15,
-          "y": -14.59,
-          "width": 0.6,
-          "height": 1.45
-        },
-        {
-          "name": "Edge Hazard 06",
-          "x": -6.15,
-          "y": -10.75,
+          "y": -15.28,
           "width": 0.6,
           "height": 1.45
         },
@@ -566,7 +709,7 @@
         {
           "name": "Edge Hazard 12",
           "x": -6.15,
-          "y": -3.0700000000000003,
+          "y": -3.07,
           "width": 0.6,
           "height": 1.45
         },
@@ -578,31 +721,99 @@
           "height": 1.45
         },
         {
-          "name": "Edge Hazard 18",
-          "x": -6.15,
-          "y": 4.609999999999999,
-          "width": 0.6,
-          "height": 1.45
-        },
-        {
           "name": "Edge Hazard 21",
           "x": 6.15,
-          "y": 8.48,
+          "y": 9.17,
           "width": 0.6,
           "height": 1.45
         },
         {
           "name": "Edge Hazard 24",
           "x": -6.15,
-          "y": 12.290000000000001,
+          "y": 12.98,
           "width": 0.6,
           "height": 1.45
         }
       ],
       "exitX": 5.2,
-      "exitFloorY": 17.98,
+      "exitFloorY": 18.67,
       "exitWidth": 2.4,
-      "exitHeight": 2.4
+      "exitHeight": 2.4,
+      "pockets": [
+        {
+          "name": "Flip Star Pocket 1",
+          "anchor": 6,
+          "x": -7.1,
+          "y": -11.09,
+          "width": 2.0,
+          "height": 3.6
+        },
+        {
+          "name": "Flip Star Pocket 2",
+          "anchor": 18,
+          "x": -7.1,
+          "y": 4.96,
+          "width": 2.0,
+          "height": 3.6
+        }
+      ],
+      "bonusPlatforms": [
+        {
+          "name": "Pocket 1 Recovery",
+          "x": -5.45,
+          "y": -14.39,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 1 Return Step",
+          "x": -3.0,
+          "y": -13.39,
+          "width": 1.4,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 2 Recovery",
+          "x": -5.45,
+          "y": 1.66,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Pocket 2 Return Step",
+          "x": -3.0,
+          "y": 2.66,
+          "width": 1.4,
+          "height": 0.28
+        }
+      ],
+      "stars": [
+        {
+          "name": "Route Star 1",
+          "x": -1.5,
+          "y": -17.56
+        },
+        {
+          "name": "Route Star 2",
+          "x": -1.5,
+          "y": -1.51
+        },
+        {
+          "name": "Flip Star 1",
+          "x": -7.1,
+          "y": -8.04
+        },
+        {
+          "name": "Flip Star 2",
+          "x": -7.1,
+          "y": 8.01
+        },
+        {
+          "name": "Raised Tip Star",
+          "x": 4.5,
+          "y": 9.42
+        }
+      ]
     }
   ]
 }

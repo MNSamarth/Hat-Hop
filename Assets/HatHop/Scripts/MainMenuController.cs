@@ -67,9 +67,9 @@ namespace HatHop
 #endif
             if (rabbit != null) rabbitRest = rabbit.anchoredPosition;
             playButton.interactable = SceneNavigation.CanLoad(catalog.PlayScenePath);
-            BindLevel(easyButton, "EASY", catalog.easyScenePath);
-            BindLevel(mediumButton, "MEDIUM", catalog.mediumScenePath);
-            BindLevel(hardButton, "HARD", catalog.hardScenePath);
+            BindLevel(easyButton, "EASY", catalog.easyScenePath, 0);
+            BindLevel(mediumButton, "MEDIUM", catalog.mediumScenePath, 1);
+            BindLevel(hardButton, "HARD", catalog.hardScenePath, 2);
             playButton.onClick.AddListener(() => Open(catalog.PlayScenePath));
             levelsButton.onClick.AddListener(() => Show(levelsPanel, levelsBack));
             controlsButton.onClick.AddListener(() => Show(controlsPanel, controlsBack));
@@ -79,11 +79,11 @@ namespace HatHop
             if (!playButton.interactable) status.text = "No playable level is available yet.";
         }
 
-        private void BindLevel(Button button, string label, string path)
+        private void BindLevel(Button button, string label, string path, int index)
         {
             bool ready = SceneNavigation.CanLoad(path);
             button.interactable = ready;
-            button.GetComponentInChildren<Text>().text = label + (ready ? "   /   PLAY" : "   /   COMING SOON");
+            button.GetComponentInChildren<Text>().text = label + (ready ? $"   /   BEST {LevelStars.BestFor(index)}/5" : "   /   COMING SOON");
             button.onClick.AddListener(() => Open(path));
         }
 

@@ -1,6 +1,6 @@
 # Hat Hop Progress
 
-Updated September 24, 2026. Gameplay results below are user reports from the Windows Unity installation.
+Updated September 25, 2026. Gameplay results below are user reports from the Windows Unity installation.
 
 ## Tested and saved checkpoints
 
@@ -11,31 +11,24 @@ Updated September 24, 2026. Gameplay results below are user reports from the Win
 - User chose **0.4** for Player Hop Visual > Hop Height in the gameplay scene.
 - Movement/camera checkpoint pushed: user terminal showed feature/movement-camera up to date with its remote. A separate automatic preload-settings change was discussed; final clean status has not been shown.
 
-## Current milestone: combined menu and three levels
+## Current milestone: stars and platform challenges
 
-User requested all three levels and menu in one ZIP for integration/testing. Source is authored locally on feature/three-levels, based on the earlier main-menu source checkpoint.
+User authorized five-star collection, required flips for some stars, Hard seesaws used as raised jump launch points, red undersides, and a mandatory right-side goal indicator. Source is authored locally on feature/stars-platforms; the user has not yet reported tests of this revision.
 
-- Complete generator: Hat Hop > Create Menu and Three Levels.
-- MainMenu, Easy, Medium and Hard scenes generated and wired together.
-- Easy: 22.52 units high, 15 route landings, three sections, no interior hazards.
-- Medium: 31.12 units high, 21 landings, five sections, four interior edge hazards.
-- Hard: 42.96 units high, 29 landings, seven sections, eight edge hazards.
-- Existing grounded movement, 0.4 cosmetic hop and camera size 5 configured in all new levels.
-- Shared catalog for Play, Level Select and Next Level. Final completion on Hard; Retry/Restart/Main Menu supported.
-- Side-alcove exits protected from direct vertical falls in either orientation.
-- JSON-backed static trajectory checks passed for sampled upright/flipped traversal and exit approaches after headroom/spacing revisions.
-- Design overview PNG included; it is not a Unity screenshot.
+Included: four new runtime components (StarCollectible, LevelStars, ExitIndicator, SeesawPlatform); generated star/arrow art; a lifecycle reset event; deferred scoring integrated with death/goal priority; result icons, best-score menu labels and updated level layouts. The combined generator includes menu and all three levels.
 
-Pending: import, Unity compilation, generated-scene inspection, full runs with live flips, difficulty tuning and localhost build checks. Follow THREE_LEVELS_AND_MENU.md. No Unity or browser pass is claimed from the static checks.
+Geometry checks passed for upright and flipped routes, red-face detours, gold-pocket entry, escape/recovery paths and the two raised-tip jumps. Neutral jumps fail those elevated transitions. The validator now models oriented rectangles and ceiling stops. It is an approximate static motion check, not Unity or execution of the C# mechanics.
+
+Pending: Unity compilation, scoring/persistence, star reset/contact ordering, exit-arrow behavior, live seesaw contact/transport, flips while tilted, complete five-star runs and browser checks. Follow STARS_AND_PLATFORM_CHALLENGES.md. Earlier playtests do not establish that these additions pass.
 
 ## Next milestones
 
-1. User integrates the combined ZIP and tests the menu plus all three levels.
-2. Fix reported geometry/rotation/navigation issues and tune difficulty.
-3. Deploy the tested package to GitHub Pages.
-4. Configure automatic builds/deployment for changes merged into main.
+1. Integrate the combined challenge ZIP and run focused Unity checks.
+2. Fix reported issues and tune star routes, seesaw timing and difficulty.
+3. Deploy the tested menu and three levels to GitHub Pages.
+4. Automate builds/deployment for changes merged into main.
 
-Public deployment remains on hold. No remote push or hosted release was performed by the authoring environment.
+Public deployment remains on hold. No remote push or hosted release was performed here. User Git commands were provided for the preceding level package; a clean push result for that package has not been shown.
 
 ## Source and contribution record
 

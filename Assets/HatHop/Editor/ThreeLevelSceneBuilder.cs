@@ -21,14 +21,28 @@ namespace HatHop.Editor
             public int sections;
             public float roomWidth, roomHeight, traversalSeconds, warningSeconds;
             public float[] accent;
-            public Box[] platforms, hazards;
+            public Box[] platforms, hazards, bonusPlatforms;
+            public Pocket[] pockets;
+            public Star[] stars;
             public float exitX, exitFloorY, exitWidth, exitHeight;
         }
         [Serializable] private sealed class Box
         {
             public string name;
             public float x, y, width, height;
+            public bool redUnderside, seesaw;
         }
+
+        [Serializable] private sealed class Pocket
+        {
+            public string name;
+            public int anchor;
+            public float x, y, width, height;
+        }
+        [Serializable] private sealed class Star { public string name; public float x, y; }
+
+        [MenuItem("Hat Hop/Create Stars and Platform Challenge Levels")]
+        public static void CreateChallenges() => Create();
 
         [MenuItem("Hat Hop/Create Menu and Three Levels")]
         public static void Create()
@@ -53,7 +67,7 @@ namespace HatHop.Editor
             bool replacing = File.Exists(SceneNavigation.MenuScenePath);
             foreach (string key in Keys) replacing |= File.Exists(ScenePath(key));
             if (replacing && !EditorUtility.DisplayDialog("Rebuild menu and three levels?",
-                "This replaces MainMenu, Easy, Medium and Hard scenes and updates their LevelCatalog mappings. " +
+                "This replaces MainMenu, Easy, Medium and Hard scenes and updates their LevelCatalog mappings and generated icons. " +
                 "Save or commit any manual edits first. GameplayTest and other test scenes are preserved.",
                 "Rebuild", "Cancel")) return;
 
@@ -64,6 +78,8 @@ namespace HatHop.Editor
             AssetDatabase.Refresh();
             Sprite square = CreateSquare();
             PhysicsMaterial2D material = CreateMaterial();
+            Sprite star = ChallengeArt.CreateStar();
+            Texture2D arrow = ChallengeArt.CreateArrow();
             LevelCatalog catalog = AssetDatabase.LoadAssetAtPath<LevelCatalog>(MainMenuSceneBuilder.CatalogPath);
             if (catalog == null)
             {
@@ -74,7 +90,7 @@ namespace HatHop.Editor
             catalog.mediumScenePath = ScenePath("Medium");
             catalog.hardScenePath = ScenePath("Hard");
             EditorUtility.SetDirty(catalog);
-            for (int i = 0; i < layouts.levels.Length; i++) Build(layouts.levels[i], i, catalog, square, material);
+            for (int i = 0; i < layouts.levels.Length; i++) Build(layouts.levels[i], i, catalog, square, material, star, arrow);
             AssetDatabase.SaveAssets();
             if (!MainMenuSceneBuilder.Build(false))
             {
@@ -92,7 +108,7 @@ namespace HatHop.Editor
             {
                 Layout l = set.levels[i];
                 if (l.key != Keys[i] || l.platforms == null || l.platforms.Length < 2 ||
-                    l.hazards == null || l.accent == null || l.accent.Length != 3 ||
+                    l.hazards == null || l.bonusPlatforms == null || l.pockets == null || l.stars == null || l.stars.Length != 5 || l.accent == null || l.accent.Length != 3 ||
                     l.roomWidth <= 0 || l.roomHeight <= 0 || l.sections < 1 || l.exitWidth <= 0 || l.exitHeight < 2 ||
                     l.traversalSeconds <= 0 || l.warningSeconds <= 0)
                     throw new InvalidDataException("Invalid layout: " + Keys[i]);
@@ -104,7 +120,7 @@ namespace HatHop.Editor
 
         private static string ScenePath(string key) => Root + "/Scenes/" + key + ".unity";
 
-        private static void Build(Layout layout, int index, LevelCatalog catalog, Sprite square, PhysicsMaterial2D material)
+        private static void Build(Layout layout, int index, LevelCatalog catalog, Sprite square, PhysicsMaterial2D material, Sprite starSprite, Texture2D arrow)
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             Color accent = new Color(layout.accent[0], layout.accent[1], layout.accent[2]);
@@ -131,11 +147,40 @@ namespace HatHop.Editor
                 new Vector2(0.4f, layout.roomHeight + 1), map, square, surface);
             Transform platforms = new GameObject("Platforms").transform;
             platforms.SetParent(map, false);
+            GameObject[] routeObjects = new GameObject[layout.platforms.Length];
             for (int i = 0; i < layout.platforms.Length; i++)
             {
                 Box p = layout.platforms[i];
-                BoxObject(p.name, new Vector2(p.x, p.y), new Vector2(p.width, p.height),
-                    platforms, square, i % 4 == 0 ? Color.Lerp(surface, accent, 0.55f) : surface);
+                Color color = p.seesaw ? new Color(1f, 0.78f, 0.25f) : i % 4 == 0 ? Color.Lerp(surface, accent, 0.55f) : surface;
+                if (p.seesaw)
+                {
+                    GameObject pivot = new GameObject(p.name + " Seesaw");
+                    pivot.transform.SetParent(platforms, false);
+                    pivot.transform.localPosition = new Vector3(p.x, p.y, 0);
+                    BoxObject("Beam", Vector2.zero, new Vector2(p.width, p.height), pivot.transform, square, color);
+                    Rigidbody2D moving = pivot.AddComponent<Rigidbody2D>();
+                    moving.bodyType = RigidbodyType2D.Kinematic;
+                    moving.interpolation = RigidbodyInterpolation2D.None;
+                    pivot.AddComponent<SeesawPlatform>();
+                    routeObjects[i] = pivot;
+                    BoxObject("Pivot Marker", new Vector2(p.x, p.y - 0.36f), new Vector2(0.24f, 0.24f),
+                        decoration, square, color, false, 1);
+                }
+                else routeObjects[i] = BoxObject(p.name, new Vector2(p.x, p.y), new Vector2(p.width, p.height),
+                    platforms, square, color);
+            }
+            foreach (Box p in layout.bonusPlatforms)
+                BoxObject(p.name, new Vector2(p.x, p.y), new Vector2(p.width, p.height), platforms, square, accent);
+            foreach (Pocket pocket in layout.pockets)
+            {
+                Transform group = new GameObject(pocket.name).transform;
+                group.SetParent(map, false);
+                Color gold = new Color(0.85f, 0.66f, 0.28f);
+                BoxObject("Closed Cap", new Vector2(pocket.x, pocket.y + pocket.height),
+                    new Vector2(pocket.width + 0.2f, 0.2f), group, square, gold);
+                foreach (float side in new[] { -1f, 1f })
+                    BoxObject("Pocket Wall", new Vector2(pocket.x + side * pocket.width / 2, pocket.y + pocket.height / 2),
+                        new Vector2(0.2f, pocket.height + 0.2f), group, square, gold);
             }
             // Two solid horizontal faces block a straight fall into the green trigger in either orientation.
             Transform exit = new GameObject("Exit Alcove").transform;
@@ -180,6 +225,27 @@ namespace HatHop.Editor
             GameplayHUD hud = systems.AddComponent<GameplayHUD>();
             hud.Configure(flow);
             hud.ConfigureLevel(catalog, index, layout.key.ToUpperInvariant() + " / " + layout.title);
+            LevelStars stars = systems.AddComponent<LevelStars>();
+            stars.Configure(flow, map, index, starSprite.texture);
+            Transform collectibles = new GameObject("Stars").transform;
+            collectibles.SetParent(map, false);
+            foreach (Star item in layout.stars)
+            {
+                GameObject token = BoxObject(item.name, new Vector2(item.x, item.y), new Vector2(0.55f, 0.55f),
+                    collectibles, starSprite, Color.white, false, 6);
+                CircleCollider2D pickup = token.AddComponent<CircleCollider2D>();
+                pickup.radius = 0.38f;
+                token.AddComponent<StarCollectible>().Configure(stars);
+            }
+            for (int i = 0; i < routeObjects.Length; i++)
+            {
+                if (layout.platforms[i].seesaw)
+                    routeObjects[i].GetComponent<SeesawPlatform>().Configure(motor, rotation, map,
+                        routeObjects[i].GetComponentInChildren<Collider2D>());
+                if (layout.platforms[i].redUnderside)
+                    Trigger("Lethal Underside", new Vector2(0, -0.60f), new Vector2(1, 0.25f),
+                        routeObjects[i].transform, square, red, LevelTrigger2D.Kind.Hazard, flow);
+            }
 
             Transform hazards = new GameObject("Hazards").transform;
             hazards.SetParent(map, false);
@@ -190,7 +256,7 @@ namespace HatHop.Editor
             foreach (Box h in layout.hazards)
                 Trigger(h.name, new Vector2(h.x, h.y), new Vector2(h.width, h.height),
                     hazards, square, red, LevelTrigger2D.Kind.Hazard, flow);
-            Trigger("Exit", new Vector2(layout.exitX + 0.1f, layout.exitFloorY + layout.exitHeight / 2),
+            GameObject goal = Trigger("Exit", new Vector2(layout.exitX + 0.1f, layout.exitFloorY + layout.exitHeight / 2),
                 new Vector2(0.65f, layout.exitHeight - 0.5f), exit, square,
                 new Color(0.25f, 1f, 0.52f), LevelTrigger2D.Kind.Goal, flow);
 
@@ -203,6 +269,7 @@ namespace HatHop.Editor
             camera.backgroundColor = new Color(0.035f, 0.045f, 0.07f);
             camera.gameObject.AddComponent<AudioListener>();
             camera.gameObject.AddComponent<PlayerFollowCamera>().Configure(motor, rotation, 10);
+            systems.AddComponent<ExitIndicator>().Configure(camera, motor.transform, goal.transform, flow, arrow);
             if (!EditorSceneManager.SaveScene(scene, ScenePath(layout.key)))
                 throw new IOException("Could not save " + layout.key + ". Stop and inspect the Console before rebuilding.");
         }
@@ -231,11 +298,12 @@ namespace HatHop.Editor
             return go;
         }
 
-        private static void Trigger(string name, Vector2 position, Vector2 size, Transform parent,
+        private static GameObject Trigger(string name, Vector2 position, Vector2 size, Transform parent,
             Sprite sprite, Color color, LevelTrigger2D.Kind kind, LevelFlow flow)
         {
             GameObject go = BoxObject(name, position, size, parent, sprite, color);
             go.AddComponent<LevelTrigger2D>().Configure(kind, flow);
+            return go;
         }
 
         private static PhysicsMaterial2D CreateMaterial()

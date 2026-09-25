@@ -1,5 +1,8 @@
 # Hat Hop: menu and three levels
 
+**Current update:** use STARS_AND_PLATFORM_CHALLENGES.md and its combined ZIP. This file records the earlier milestone; the latest JSON and challenge guide define current layouts and scoring.
+
+
 Combined milestone for Unity 6000.3.23f1, 2D Built-In. Apply this ZIP to the existing Hat Hop project with the tested grounded movement/camera update. It includes the entire main-menu patch, so the separate menu ZIP is not needed.
 
 ## What is included

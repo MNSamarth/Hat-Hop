@@ -1,6 +1,6 @@
 # Hat Hop Unity Development Guide
 
-Working reference for USC CSCI 526. Updated September 24, 2026.
+Working reference for USC CSCI 526. Updated September 25, 2026.
 
 Read this guide and PROGRESS.md before changing the project. The latest explicit user decisions take priority over the supplied design reference. In particular, grounded movement with visual hopping now replaces automatic physical hopping. Earlier milestone documents are historical records.
 
@@ -8,9 +8,9 @@ Read this guide and PROGRESS.md before changing the project. The latest explicit
 
 Build a 2D vertical platformer where warned, game-controlled 180-degree map rotations turn climbs into controlled descents. The rabbit escaping a magician's hat is the theme; movement and level geometry must communicate the game without story, elaborate art or cutscenes.
 
-The user has tested the revised movement and closer camera in GameplayTest. The user now requested one combined delivery of the main menu and all three larger levels, to integrate and test together. Browser Web builds on GitHub Pages remain the delivery target. Public deployment is deferred until the movement and game are ready; the initial local browser build has passed according to the user.
+The user has tested the revised movement and closer camera in GameplayTest. The user requested one combined delivery of menu, three levels, stars, exit guidance and platform challenges, to integrate and test together. Browser Web builds on GitHub Pages remain the delivery target. Public deployment is deferred until the movement and game are ready; the initial local browser build has passed according to the user.
 
-Avoid enemies, inventory, combat, collectibles, fall damage and new platform mechanics unless playtests establish a need. Use self-created assets under the assignment requirements recorded in the design reference.
+Current authorized additions are five collectible stars per level, flip-dependent star pockets, red undersides, a right-side exit indicator and two delayed seesaws in Hard. Avoid enemies, inventory, combat and fall damage. Use self-created assets under the assignment requirements recorded in the design reference.
 
 ## 2. Current gameplay rules
 
@@ -87,13 +87,13 @@ The camera follows the player root, never Visual. Halving orthographic size give
 
 ## 7. Three-level design plan
 
-The first larger layouts are authored in Assets/HatHop/Editor/LevelData/ThreeLevels.json. ThreeLevelSceneBuilder generates complete Easy, Medium and Hard scenes plus MainMenu through **Hat Hop > Create Menu and Three Levels**. Refer to THREE_LEVELS_AND_MENU.md for integration and tests.
+The first larger layouts are authored in Assets/HatHop/Editor/LevelData/ThreeLevels.json. ThreeLevelSceneBuilder generates complete Easy, Medium and Hard scenes plus MainMenu through **Hat Hop > Create Menu and Three Levels**. Refer to STARS_AND_PLATFORM_CHALLENGES.md for current integration and tests. Earlier milestone documents are historical.
 
 | Level | Room size / route landings | Learning or challenge |
 | --- | --- | --- |
 | Easy: The Foyer | 16 x 22.52 / 15 | Three sections, broad landings, no interior hazards, 10-second traversal before warning. |
-| Medium: False Bottom | 18 x 31.12 / 21 | Five sections, longer sweeps, narrower landings, four edge hazards, 8-second traversal. |
-| Hard: The Last Act | 20 x 42.96 / 29 | Seven sections, precision platforms, eight edge hazards, 6-second traversal. |
+| Medium: False Bottom | 18 x 31.12 / 21 | Five sections, longer sweeps, red undersides and flip-star pockets, 8-second traversal. |
+| Hard: The Last Act | 20 x 44.34 / 29 | Seven sections, precision platforms, red undersides, flip-star pockets and two seesaw jumps, 6-second traversal. |
 
 Warnings stay at two seconds and turns at 0.6 seconds. All layouts use the same motor, 0.4 visual hop height and camera size 5. The level boundary-distance guard scales with the room radius instead of the old fixed 25 units. The generator creates a separate material and sprite and preserves older test scenes.
 
@@ -101,9 +101,19 @@ Side-alcove exits have solid roofs/floors/back walls to block direct vertical wi
 
 After deterministic layouts pass, schedule single-use progress bands in original map-local coordinates. Track maximum progress, use reproducible seeds, enforce a minimum gap and never overlap warnings/turns. If a band cannot offer a fair preparation route within the warning, relocate or remove it. The initial three/four-flip idea remains tunable per level.
 
+## 7a. Stars, guidance and platform challenges
+
+Each level has exactly five stars: two on the main route, two in deep gold pockets, and one final-approach/raised-ledge reward. Golden pockets have a closed cap and sides with a lower mouth in the original orientation. Their star pickup zones lie beyond upright jump reach. Flip, descend through the upward-facing opening, collect, then exit toward the center after a later flip using recovery shelves. These are optional detours; reaching the green exit does not require a minimum score.
+
+A right-side floating arrow tracks the actual exit direction and hides when the goal is visibly onscreen. No full-map reveal is added. Best score changes only after a successful clear, never on death or menu abandonment. LevelFlow resolves hazard first, then deduplicated star pickups, then goal/save at a physics boundary. RoomReset restores collectibles and neutral seesaw poses before transform synchronization, including safety resets.
+
+Medium has red undersides on Landings 03/15; Hard on 03/15/27. The marked face is always lethal, including jumping into it upright. It becomes the upper landing face after a flip; alternate safe descents remain available.
+
+Hard has kinematic pivot seesaws on Landings 08/20, at most 18 degrees, with 0.55-second edge dwell and a two-second crossing hold. Upright jumps to the following ledges are two units high: a neutral jump cannot reach them, while a raised-tip jump can. World flips still allow alternate descent strategies; do not claim seesaws are mechanically mandatory in every orientation. Freeze their self-tilt during turns/outcomes and reset their state with the room. Test actual contact transport and support before declaring the feature complete.
+
 ## 8. Menus and level progression plan
 
-The combined source now includes MainMenu with Play, Level Select and Controls, and three mapped level scenes generated together. Play opens Easy; all difficulties are available directly. GameplayHUD shows the level name, Restart/Main Menu and outcome controls. Easy and Medium have Next Level; Hard shows final completion with Retry/Main Menu. Selecting Hard directly does not imply all three were cleared. There is no saved progress or unlock system.
+The combined source now includes MainMenu with Play, Level Select and Controls, and three mapped level scenes generated together. Play opens Easy; all difficulties are available directly. GameplayHUD shows the level name, Restart/Main Menu and outcome controls. Easy and Medium have Next Level; Hard shows final completion with Retry/Main Menu. Selecting Hard directly does not imply all three were cleared. Best completed 0-5 star ratings are saved locally per level; all difficulties remain unlocked. Stars collected during an unfinished attempt are not banked.
 
 LevelCatalog is the single scene-path mapping source for both menu and Next Level. Its custom Inspector uses SceneAsset pickers. MainMenu is first in the global build list, followed by Easy, Medium and Hard. Profile-specific overrides must include the same enabled scenes. Refresh Menu Build Scenes after mapping changes; reassign moved scene paths.
 
@@ -142,7 +152,7 @@ Include package/settings changes explicitly when relevant. Commit Assets and cor
 ## 10. Current milestone order and delivery
 
 1. Revised movement and closer camera: user reports working; visual hop height chosen as 0.4.
-2. Combined main menu, all three levels and completion progression: source authored, static layout checks passed, Unity validation pending.
+2. Combined menu/levels plus stars, exit indicator, red undersides and Hard seesaws: source authored, enhanced static geometry checks passed, Unity validation pending.
 3. Integrate and playtest the complete set; tune jump routes, live flip fairness, warning pacing and presentation.
 4. Deploy menu plus all three levels together, then automate builds/deployment from main.
 
