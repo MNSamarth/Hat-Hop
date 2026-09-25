@@ -8,7 +8,7 @@ Read this guide and PROGRESS.md before changing the project. The latest explicit
 
 Build a 2D vertical platformer where warned, game-controlled 180-degree map rotations turn climbs into controlled descents. The rabbit escaping a magician's hat is the theme; movement and level geometry must communicate the game without story, elaborate art or cutscenes.
 
-First validate the revised movement and closer camera in the existing GameplayTest. Then create larger Easy, Medium and Hard levels and simple menus. Browser Web builds on GitHub Pages remain the delivery target. Public deployment is deferred until the movement and game are ready; the initial local browser build has passed according to the user.
+The user has tested the revised movement and closer camera in GameplayTest. The user now requested one combined delivery of the main menu and all three larger levels, to integrate and test together. Browser Web builds on GitHub Pages remain the delivery target. Public deployment is deferred until the movement and game are ready; the initial local browser build has passed according to the user.
 
 Avoid enemies, inventory, combat, collectibles, fall damage and new platform mechanics unless playtests establish a need. Use self-created assets under the assignment requirements recorded in the design reference.
 
@@ -69,7 +69,7 @@ Read fresh key presses in Update. Apply velocity in FixedUpdate. Ground support 
 
 Preserve scene tuning when renaming serialized fields. The new Jump Speed migrates from Big Hop Speed using FormerlySerializedAs. Starting values are horizontal speed 4.5, jump speed 8, gravity scale 2 and minimum ground-normal Y 0.65. At default gravity magnitude 9.81, theoretical maximum jump rise is approximately 1.63 units. Layout must leave clearance and a margin rather than using this as a guaranteed platform gap.
 
-Cosmetic hopping moves only the Visual child. Default height is 0.12 world units and period 0.32 seconds; animation continues at idle when grounded and stops during real jumps, suspension or finished runs. Keep it small enough that collision behavior remains visually understandable. The player's root collision box stays still while idle.
+Cosmetic hopping moves only the Visual child. The user has set the scene hop height to 0.4 world units; keep that tuning (the original script default is 0.12). The period is 0.32 seconds; animation continues at idle when grounded and stops during real jumps, suspension or finished runs. Keep it small enough that collision behavior remains visually understandable. The player's root collision box stays still while idle.
 
 The camera follows the player root, never Visual. Halving orthographic size gives 2x linear magnification at a fixed aspect ratio: GameplayTest's size 10 becomes 5. Preserve the original reference size so repeated setup is idempotent. Start with modest velocity-based look-ahead and smoothing; directly track the player during rotation and snap after reset. Do not zoom out to reveal the whole route automatically. The closer camera does not guarantee the exit is always hidden; placement and layout must support discovery while preserving readable landings.
 
@@ -87,21 +87,27 @@ The camera follows the player root, never Visual. Halving orthographic size give
 
 ## 7. Three-level design plan
 
-All levels should be larger than the original compact test room. Build Easy first; do not freeze all three layouts before validating the revised jump and viewport.
+The first larger layouts are authored in Assets/HatHop/Editor/LevelData/ThreeLevels.json. ThreeLevelSceneBuilder generates complete Easy, Medium and Hard scenes plus MainMenu through **Hat Hop > Create Menu and Three Levels**. Refer to THREE_LEVELS_AND_MENU.md for integration and tests.
 
-| Level | Starting scope | Learning or challenge |
+| Level | Room size / route landings | Learning or challenge |
 | --- | --- | --- |
-| Easy | Three traversal sections, broad landings, generous preparation spots, simple side-alcove exit. | Understand movement, warning and ascent/descent transitions. |
-| Medium | Five sections, alternating routes, narrower landings, visible interior hazards. | Choose routes that remain useful after the next rotation. |
-| Hard | Seven sections, offset platforms, fewer safe preparation choices, more demanding exit approach. | Combine precise movement, controlled descent and preparation. |
+| Easy: The Foyer | 16 x 22.52 / 15 | Three sections, broad landings, no interior hazards, 10-second traversal before warning. |
+| Medium: False Bottom | 18 x 31.12 / 21 | Five sections, longer sweeps, narrower landings, four edge hazards, 8-second traversal. |
+| Hard: The Last Act | 20 x 42.96 / 29 | Seven sections, precision platforms, eight edge hazards, 6-second traversal. |
 
-Section counts are planning targets, not committed geometry or guaranteed duration. Tune section dimensions from measured jump reach and the new camera view. Keep platforms reachable with margin, break straight falls with staggered surfaces and make the same exit accessible in either orientation. Test warnings during jumps, edge departures and descent. Never use offscreen lethal surprises as a substitute for difficulty.
+Warnings stay at two seconds and turns at 0.6 seconds. All layouts use the same motor, 0.4 visual hop height and camera size 5. The level boundary-distance guard scales with the room radius instead of the old fixed 25 units. The generator creates a separate material and sprite and preserves older test scenes.
+
+Side-alcove exits have solid roofs/floors/back walls to block direct vertical wins in both orientations. Descending into an inverted exit requires going around its open side. Static sampled trajectory checks cover adjacent platforms and both exit approaches; they do not establish that live flips or final difficulty are fair. Playtest each layout in Unity and tune from actual results. Keep both orientations traversable and avoid offscreen lethal surprises.
 
 After deterministic layouts pass, schedule single-use progress bands in original map-local coordinates. Track maximum progress, use reproducible seeds, enforce a minimum gap and never overlap warnings/turns. If a band cannot offer a fair preparation route within the warning, relocate or remove it. The initial three/four-flip idea remains tunable per level.
 
 ## 8. Menus and level progression plan
 
-Still to implement: a main menu with Play, Level Select and Controls; in-game Restart and Main Menu; completion options Next Level, Retry and Main Menu. Hard should show completion instead of a nonexistent next level. Define scene names and build-list order explicitly. Any pause flow must freeze gameplay timers and restore time on restart or scene change. Keep implementation details out of the player's UI.
+The combined source now includes MainMenu with Play, Level Select and Controls, and three mapped level scenes generated together. Play opens Easy; all difficulties are available directly. GameplayHUD shows the level name, Restart/Main Menu and outcome controls. Easy and Medium have Next Level; Hard shows final completion with Retry/Main Menu. Selecting Hard directly does not imply all three were cleared. There is no saved progress or unlock system.
+
+LevelCatalog is the single scene-path mapping source for both menu and Next Level. Its custom Inspector uses SceneAsset pickers. MainMenu is first in the global build list, followed by Easy, Medium and Hard. Profile-specific overrides must include the same enabled scenes. Refresh Menu Build Scenes after mapping changes; reassign moved scene paths.
+
+SceneNavigation uses validated asynchronous Single-mode loads and guards repeated requests. No persistent gameplay objects carry timers/input between levels. Existing LevelFlow owns restart/death/win; menu navigation does not disable rotation as a substitute for win. Future pause behavior must freeze relevant timers and restore time on navigation.
 
 ## 9. Git workflow
 
@@ -121,7 +127,7 @@ git pull --ff-only origin main
 git switch -c feature/your-feature
 ```
 
-For the current movement revision, stay on the existing feature/movement-camera branch. Save scenes outside Play Mode, then:
+Use the existing feature/main-menu branch or create feature/menu-levels from the tested movement checkpoint; do not assume that checkpoint has already merged to main. Save scenes outside Play Mode, then:
 
 ```sh
 git add Assets/HatHop Docs
@@ -135,13 +141,12 @@ Include package/settings changes explicitly when relevant. Commit Assets and cor
 
 ## 10. Current milestone order and delivery
 
-1. Revised grounded movement, visual hopping and closer camera.
-2. Build and playtest Easy with the new movement and visibility.
-3. Build Medium and Hard from the tested movement ranges.
-4. Add menu and level progression.
-5. Tune timing, difficulty and presentation, then publish.
+1. Revised movement and closer camera: user reports working; visual hop height chosen as 0.4.
+2. Combined main menu, all three levels and completion progression: source authored, static layout checks passed, Unity validation pending.
+3. Integrate and playtest the complete set; tune jump routes, live flip fairness, warning pacing and presentation.
+4. Deploy menu plus all three levels together, then automate builds/deployment from main.
 
-Completed user-reported checkpoints: initial movement, rotation, gameplay loop and a localhost Web build. Public hosting is deferred by user preference. Rebuild after code/scene changes; pushing C# source alone does not update a hosted game. Publish generated build files separately, for example in gh-pages, and configure Pages to that output. Build into ignored Builds/Web. Start with disabled compression or configure decompression fallback if the host cannot provide required headers. Serve via HTTP/HTTPS and verify the actual hosted URL, keyboard focus, full loop and restart. GitHub Actions Unity build automation is optional later work, not configured.
+Completed user-reported checkpoints: initial movement, rotation, gameplay loop and a localhost Web build. Public hosting is deferred by user preference. Rebuild after code/scene changes; pushing C# source alone does not update a hosted game. Publish generated build files separately, for example in gh-pages, and configure Pages to that output. Build into ignored Builds/Web. Start with disabled compression or configure decompression fallback if the host cannot provide required headers. Serve via HTTP/HTTPS and verify the actual hosted URL, keyboard focus, full loop and restart. The user wants automatic rebuild/deployment for changes merged into main after the combined release. GitHub Actions Unity build automation is not configured yet.
 
 The design reference records submission on October 2, 2026 at 12:59 PM, via Brightspace and Discord, with GitHub Pages hosting and a video under one minute. Reserve time on October 1 for submission checks. Confirm current course announcements before final delivery. Still required: three researched genre games, actual Week 3 matrix columns, diagram, final controls, repository/build/video links and truthful contribution/AI records. This development guide is not the final graded design document. User reports this year's TA/grader guidance permits complete AI use.
 

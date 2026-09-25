@@ -1,0 +1,608 @@
+{
+  "levels": [
+    {
+      "key": "Easy",
+      "title": "THE FOYER",
+      "sections": 3,
+      "roomWidth": 16,
+      "roomHeight": 22.52,
+      "traversalSeconds": 10,
+      "warningSeconds": 2.0,
+      "accent": [
+        0.2,
+        0.75,
+        0.85
+      ],
+      "platforms": [
+        {
+          "name": "Start",
+          "x": -3.8,
+          "y": -8.76,
+          "width": 3.1,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 01",
+          "x": 0,
+          "y": -7.66,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 02",
+          "x": 3.8,
+          "y": -6.56,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 03",
+          "x": 0,
+          "y": -5.46,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 04",
+          "x": -3.8,
+          "y": -4.36,
+          "width": 3.1,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 05",
+          "x": 0,
+          "y": -3.26,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 06",
+          "x": 3.8,
+          "y": -2.16,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 07",
+          "x": 0,
+          "y": -1.06,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 08",
+          "x": -3.8,
+          "y": 0.04,
+          "width": 3.1,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 09",
+          "x": 0,
+          "y": 1.14,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 10",
+          "x": 3.8,
+          "y": 2.24,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 11",
+          "x": 0,
+          "y": 3.34,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 12",
+          "x": -3.8,
+          "y": 4.44,
+          "width": 3.1,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 13",
+          "x": 0,
+          "y": 5.54,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 14",
+          "x": 3.8,
+          "y": 6.64,
+          "width": 2.8,
+          "height": 0.28
+        }
+      ],
+      "hazards": [],
+      "exitX": 5.8,
+      "exitFloorY": 7.76,
+      "exitWidth": 2.4,
+      "exitHeight": 2.4
+    },
+    {
+      "key": "Medium",
+      "title": "FALSE BOTTOM",
+      "sections": 5,
+      "roomWidth": 18,
+      "roomHeight": 31.12,
+      "traversalSeconds": 8,
+      "warningSeconds": 2.0,
+      "accent": [
+        0.64,
+        0.49,
+        0.92
+      ],
+      "platforms": [
+        {
+          "name": "Start",
+          "x": -4.6,
+          "y": -13.06,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 01",
+          "x": -1.4,
+          "y": -11.83,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 02",
+          "x": 1.4,
+          "y": -10.66,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 03",
+          "x": 4.6,
+          "y": -9.46,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 04",
+          "x": 1.4,
+          "y": -8.26,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 05",
+          "x": -1.4,
+          "y": -7.03,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 06",
+          "x": -4.6,
+          "y": -5.86,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 07",
+          "x": -1.4,
+          "y": -4.66,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 08",
+          "x": 1.4,
+          "y": -3.46,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 09",
+          "x": 4.6,
+          "y": -2.23,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 10",
+          "x": 1.4,
+          "y": -1.06,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 11",
+          "x": -1.4,
+          "y": 0.14,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 12",
+          "x": -4.6,
+          "y": 1.34,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 13",
+          "x": -1.4,
+          "y": 2.57,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 14",
+          "x": 1.4,
+          "y": 3.74,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 15",
+          "x": 4.6,
+          "y": 4.94,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 16",
+          "x": 1.4,
+          "y": 6.14,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 17",
+          "x": -1.4,
+          "y": 7.37,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 18",
+          "x": -4.6,
+          "y": 8.54,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 19",
+          "x": -1.4,
+          "y": 9.74,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 20",
+          "x": 1.4,
+          "y": 10.94,
+          "width": 2.8,
+          "height": 0.28
+        }
+      ],
+      "hazards": [
+        {
+          "name": "Edge Hazard 03",
+          "x": 6.0,
+          "y": -8.91,
+          "width": 0.6,
+          "height": 1.05
+        },
+        {
+          "name": "Edge Hazard 07",
+          "x": -6.0,
+          "y": -4.11,
+          "width": 0.6,
+          "height": 1.05
+        },
+        {
+          "name": "Edge Hazard 11",
+          "x": -6.0,
+          "y": 0.6900000000000001,
+          "width": 0.6,
+          "height": 1.05
+        },
+        {
+          "name": "Edge Hazard 15",
+          "x": 6.0,
+          "y": 5.49,
+          "width": 0.6,
+          "height": 1.05
+        }
+      ],
+      "exitX": 5.5,
+      "exitFloorY": 12.06,
+      "exitWidth": 2.4,
+      "exitHeight": 2.4
+    },
+    {
+      "key": "Hard",
+      "title": "THE LAST ACT",
+      "sections": 7,
+      "roomWidth": 20,
+      "roomHeight": 42.96,
+      "traversalSeconds": 6,
+      "warningSeconds": 2.0,
+      "accent": [
+        0.98,
+        0.6,
+        0.25
+      ],
+      "platforms": [
+        {
+          "name": "Start",
+          "x": -4.5,
+          "y": -18.98,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 01",
+          "x": -1.5,
+          "y": -17.67,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 02",
+          "x": 1.5,
+          "y": -16.42,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 03",
+          "x": 4.5,
+          "y": -15.14,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 04",
+          "x": 1.5,
+          "y": -13.86,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 05",
+          "x": -1.5,
+          "y": -12.55,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 06",
+          "x": -4.5,
+          "y": -11.3,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 07",
+          "x": -1.5,
+          "y": -10.02,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 08",
+          "x": 1.5,
+          "y": -8.74,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 09",
+          "x": 4.5,
+          "y": -7.43,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 10",
+          "x": 1.5,
+          "y": -6.18,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 11",
+          "x": -1.5,
+          "y": -4.9,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 12",
+          "x": -4.5,
+          "y": -3.62,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 13",
+          "x": -1.5,
+          "y": -2.31,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 14",
+          "x": 1.5,
+          "y": -1.06,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 15",
+          "x": 4.5,
+          "y": 0.22,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 16",
+          "x": 1.5,
+          "y": 1.5,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 17",
+          "x": -1.5,
+          "y": 2.81,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 18",
+          "x": -4.5,
+          "y": 4.06,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 19",
+          "x": -1.5,
+          "y": 5.34,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 20",
+          "x": 1.5,
+          "y": 6.62,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 21",
+          "x": 4.5,
+          "y": 7.93,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 22",
+          "x": 1.5,
+          "y": 9.18,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 23",
+          "x": -1.5,
+          "y": 10.46,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 24",
+          "x": -4.5,
+          "y": 11.74,
+          "width": 2.45,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 25",
+          "x": -1.5,
+          "y": 13.05,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 26",
+          "x": 1.5,
+          "y": 14.3,
+          "width": 1.65,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 27",
+          "x": 4.5,
+          "y": 15.58,
+          "width": 1.75,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 28",
+          "x": 1.5,
+          "y": 16.86,
+          "width": 2.45,
+          "height": 0.28
+        }
+      ],
+      "hazards": [
+        {
+          "name": "Edge Hazard 03",
+          "x": 6.15,
+          "y": -14.59,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 06",
+          "x": -6.15,
+          "y": -10.75,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 09",
+          "x": 6.15,
+          "y": -6.88,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 12",
+          "x": -6.15,
+          "y": -3.0700000000000003,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 15",
+          "x": 6.15,
+          "y": 0.77,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 18",
+          "x": -6.15,
+          "y": 4.609999999999999,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 21",
+          "x": 6.15,
+          "y": 8.48,
+          "width": 0.6,
+          "height": 1.45
+        },
+        {
+          "name": "Edge Hazard 24",
+          "x": -6.15,
+          "y": 12.290000000000001,
+          "width": 0.6,
+          "height": 1.45
+        }
+      ],
+      "exitX": 5.2,
+      "exitFloorY": 17.98,
+      "exitWidth": 2.4,
+      "exitHeight": 2.4
+    }
+  ]
+}
