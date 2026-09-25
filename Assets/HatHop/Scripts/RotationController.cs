@@ -34,6 +34,7 @@ namespace HatHop
         private bool initialized;
         private bool halted;
         private bool deferResumeOneStep;
+        public event System.Action RoomReset;
         public bool IsInitialized => initialized;
         public bool IsHalted => halted;
         public Phase CurrentPhase { get; private set; }
@@ -224,6 +225,7 @@ namespace HatHop
             SetPlayerPose(spawn);
             player.ResetAt(spawn);
             player.SetSuspended(true);
+            RoomReset?.Invoke();
             Physics2D.SyncTransforms();
             flipped = false;
             CompletedTurns = 0;

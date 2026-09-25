@@ -16,6 +16,18 @@ namespace HatHop
         [SerializeField, Min(0.1f)] private float respawnDelay = 0.6f;
         [SerializeField, Min(1f)] private float outOfBoundsDistance = 25f;
         private Rigidbody2D body;
+        private LevelStars stars;
+        private SeesawPlatform[] seesaws;
+        public LevelStars Stars => stars;
+        public string PlatformHint
+        {
+            get
+            {
+                if (seesaws != null) foreach (SeesawPlatform seesaw in seesaws)
+                    if (seesaw != null && seesaw.PlayerOnSurface) return seesaw.Hint;
+                return "";
+            }
+        }
         private bool hazardPending;
         private bool goalPending;
         private bool restartPending;
@@ -42,6 +54,9 @@ namespace HatHop
                 return;
             }
             body = player.GetComponent<Rigidbody2D>();
+            stars = GetComponent<LevelStars>();
+            seesaws = mapRoot.GetComponentsInChildren<SeesawPlatform>(true);
+            rotation.RoomReset += ResetLevelObjects;
         }
 
         private void Update()
@@ -56,14 +71,29 @@ namespace HatHop
 
         public void RequestRestart() => restartPending = true;
 
+        public bool AcceptsPlayerContact(Rigidbody2D enteringBody) => isActiveAndEnabled && body != null &&
+            enteringBody == body && State == RunState.Playing && rotation != null &&
+            rotation.IsInitialized && !rotation.IsHalted && !restartPending &&
+            rotation.CurrentPhase != RotationController.Phase.Turning;
+
         public void ReportTrigger(LevelTrigger2D.Kind kind, Rigidbody2D enteringBody)
         {
-            if (!isActiveAndEnabled || enteringBody != body || State != RunState.Playing ||
-                !rotation.IsInitialized || rotation.IsHalted || restartPending ||
-                rotation.CurrentPhase == RotationController.Phase.Turning) return;
-            // Do not decide inside a callback: callback order must not decide death vs win.
+            if (!AcceptsPlayerContact(enteringBody)) return;
+            // Death, stars and exit are resolved once at the next physics boundary.
             if (kind == LevelTrigger2D.Kind.Hazard) hazardPending = true;
             else goalPending = true;
+        }
+
+        private void ResetLevelObjects()
+        {
+            if (stars != null) stars.ResetAttempt();
+            if (seesaws != null) foreach (SeesawPlatform seesaw in seesaws) if (seesaw != null) seesaw.ResetTilt();
+            hazardPending = goalPending = false;
+        }
+
+        private void OnDestroy()
+        {
+            if (rotation != null) rotation.RoomReset -= ResetLevelObjects;
         }
 
         private void FixedUpdate()
@@ -89,15 +119,21 @@ namespace HatHop
 
             if (hazardPending)
             {
+                if (stars != null) stars.DiscardPending();
                 State = RunState.Dead;
                 Deaths++;
                 deathElapsed = 0;
                 rotation.HaltForOutcome();
             }
-            else if (goalPending)
+            else
             {
-                State = RunState.Won;
-                rotation.HaltForOutcome();
+                if (stars != null) stars.ResolvePending();
+                if (goalPending)
+                {
+                    State = RunState.Won;
+                    if (stars != null) stars.SaveCompletedRun();
+                    rotation.HaltForOutcome();
+                }
             }
             hazardPending = false;
             goalPending = false;

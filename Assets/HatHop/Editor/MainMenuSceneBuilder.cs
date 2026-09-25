@@ -108,7 +108,7 @@ namespace HatHop.Editor
             RectTransform help = Rect("Controls", stage, 610, 69, 420, 454);
             Label("Heading", help, "FIND YOUR FOOTING", 0, 0, 420, 45, 28, White, true);
             Label("Keys", help, "A / D      Move left / right\nSPACE    Jump\nR             Restart the run", 0, 70, 420, 117, 22, White);
-            Label("Rules", help, "Reach the green exit. Avoid red hazards.\n\nThe world flips after a warning.\nPlan where you will land.\n\nUse Main Menu to leave a run.", 0, 207, 420, 151, 19, Muted);
+            Label("Rules", help, "Collect stars for a 0-5 rating.\nGreen: exit. Red faces: danger.\nWatch warnings before each flip.\nFlip to enter golden star pockets.\nHard: weight an end, cross the seesaw,\nthen jump from its raised tip.", 0, 207, 420, 151, 19, Muted);
             Button controlsBack = MakeButton(help, "Back", "BACK", 370, new Color(0.16f, 0.2f, 0.29f), White);
             Text status = Label("Status", stage, "", 610, 535, 420, 40, 17, Gold);
 

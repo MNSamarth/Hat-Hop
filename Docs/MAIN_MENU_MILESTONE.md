@@ -1,5 +1,8 @@
 # Main menu milestone
 
+**Current update:** use STARS_AND_PLATFORM_CHALLENGES.md and its combined ZIP. This file records the earlier milestone; the latest JSON and challenge guide define current layouts and scoring.
+
+
 **Combined integration:** the newer THREE_LEVELS_AND_MENU.md supersedes these standalone setup steps when using Hat_Hop_Menu_And_Three_Levels.zip. Use **Create Menu and Three Levels** to generate everything together.
 
 Target: Unity 6000.3.23f1, 2D Built-In. This is a source patch; Unity import and playtesting are still required.
