@@ -5,12 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/HatHop/Scenes/MainMenu.unity
+    guid: 94c3f517aec585b4b82d69f299308678
+  - enabled: 1
+    path: Assets/HatHop/Scenes/Easy.unity
+    guid: 420b7ed824f10b74aae97402e008c84b
+  - enabled: 1
+    path: Assets/HatHop/Scenes/Medium.unity
+    guid: 7c90d77f17f24464493ebe815f7a40d5
+  - enabled: 1
+    path: Assets/HatHop/Scenes/Hard.unity
+    guid: 994f215b8e84a5f449c01ddac3d9d5cc
   - enabled: 1
     path: Assets/HatHop/Scenes/GameplayTest.unity
     guid: 62b7f84cb0fc44f4d83f580dd8895f67
+  - enabled: 0
+    path: Assets/Scenes/SampleScene.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}

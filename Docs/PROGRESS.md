@@ -1,38 +1,44 @@
 # Hat Hop Progress
 
-Updated September 24, 2026. Source of gameplay results below: user reports from their Windows Unity installation.
+Updated September 24, 2026. Gameplay results below are user reports from the Windows Unity installation.
 
-## Tested checkpoint before the current revision
+## Tested and saved checkpoints
 
-- Unity 6000.3.23f1, 2D Built-In; Web support installed.
-- MovementTest: automatic physics hopping and steering worked; jump timing remained uncomfortable.
-- Buffered jump changed to a single queued takeoff. User accepted it temporarily and deferred fine tuning.
-- RotationTest: warning, 180-degree turn, resume and reset reported working perfectly.
-- GameplayTest: hazards, death/respawn, exit/win and restart reported working.
-- Web Build And Run: localhost browser build reported working well.
-- User pushed gameplay and Web settings to feature/gameplay-loop; terminal reported clean and up to date. User subsequently reported a GUI merge. No current remote inspection was performed here.
+- Unity 6000.3.23f1, 2D Built-In, Web support installed.
+- Rotation, hazards, death/respawn, exit/win and restart reported working.
+- Previous Web Build And Run worked on localhost; no public deployment.
+- Revised grounded jumping and follow camera reported working well.
+- User chose **0.4** for Player Hop Visual > Hop Height in the gameplay scene.
+- Movement/camera checkpoint pushed: user terminal showed feature/movement-camera up to date with its remote. A separate automatic preload-settings change was discussed; final clean status has not been shown.
 
-## Current revision: movement and camera
+## Current milestone: combined menu and three levels
 
-User requested grounded movement with cosmetic hopping, Space for a consistent real jump, and a closer camera. New source is authored on feature/movement-camera. It has not yet been imported, compiled or played in the user's Unity Editor.
+User requested all three levels and menu in one ZIP for integration/testing. Source is authored locally on feature/three-levels, based on the earlier main-menu source checkpoint.
 
-Included: replacement motor with immediate grounded jump, short landing buffer and edge grace; PlayerHopVisual; PlayerFollowCamera at 2x reference zoom; Apply Movement and Camera Update menu command; current controls in HUDs; revised development guide.
+- Complete generator: Hat Hop > Create Menu and Three Levels.
+- MainMenu, Easy, Medium and Hard scenes generated and wired together.
+- Easy: 22.52 units high, 15 route landings, three sections, no interior hazards.
+- Medium: 31.12 units high, 21 landings, five sections, four interior edge hazards.
+- Hard: 42.96 units high, 29 landings, seven sections, eight edge hazards.
+- Existing grounded movement, 0.4 cosmetic hop and camera size 5 configured in all new levels.
+- Shared catalog for Play, Level Select and Next Level. Final completion on Hard; Retry/Restart/Main Menu supported.
+- Side-alcove exits protected from direct vertical falls in either orientation.
+- JSON-backed static trajectory checks passed for sampled upright/flipped traversal and exit approaches after headroom/spacing revisions.
+- Design overview PNG included; it is not a Unity screenshot.
 
-Next action: import Hat_Hop_Movement_Camera_Update.zip, open GameplayTest, apply the scene setup command, save and complete MOVEMENT_CAMERA_UPDATE.md checks. Then commit scripts, updated scene, generated physics material and metadata. No remote push or public deployment was performed by the authoring environment.
+Pending: import, Unity compilation, generated-scene inspection, full runs with live flips, difficulty tuning and localhost build checks. Follow THREE_LEVELS_AND_MENU.md. No Unity or browser pass is claimed from the static checks.
 
-## Agreed backlog
+## Next milestones
 
-- Validate jump feel and camera comfort before enlarging the levels.
-- Easy: three sections; Medium: five; Hard: seven. All larger than the original test room. Counts remain planning targets.
-- Menus: Play, Level Select, Controls; restart/main menu in game; next/retry/main menu on completion.
-- Test both orientations and visible safe landing/preparation opportunities.
-- Add constrained, reproducible rotation timing after layouts work with deterministic timing.
-- Rebuild for browser testing after the revision. Public deployment is deferred until movement, levels and menus are ready.
+1. User integrates the combined ZIP and tests the menu plus all three levels.
+2. Fix reported geometry/rotation/navigation issues and tune difficulty.
+3. Deploy the tested package to GitHub Pages.
+4. Configure automatic builds/deployment for changes merged into main.
 
-## Source and validation boundaries
+Public deployment remains on hold. No remote push or hosted release was performed by the authoring environment.
 
-The authoring checkout contains source scaffolding; the user's generated scenes and Editor settings are not automatically synchronized here. No Unity Editor or C# compiler is available in the authoring environment. Static review and patch validation are not a Unity compilation or gameplay pass. Older milestone files retain historical instructions; the Development Guide and MOVEMENT_CAMERA_UPDATE.md define current movement rules.
+## Source and contribution record
 
-## Contribution record
+The authoring checkout contains source scaffolding; the user's generated Unity scenes, settings and current GitHub history are not automatically synchronized here. Unity Editor and a C# compiler are unavailable here.
 
-AI assistance: design guide, source scripts, Editor setup tools and implementation/debugging guidance prepared with Codex. User: local project setup, Git operations, Unity imports and reported gameplay/browser tests. Teammate contributions must be recorded when completed. User reports current TA/grader guidance permits full AI use.
+AI assistance: source, Editor tools, design/docs and review. User: local setup, Git, Unity imports, tuning and reported gameplay/browser tests. Record teammate contributions when completed. User reports current TA/grader guidance permits full AI use.

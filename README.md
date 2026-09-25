@@ -18,10 +18,15 @@ The visible rabbit placeholder makes small cosmetic hops; the collision body sta
 
 ## Current revision
 
-The movement and camera revision is authored and awaiting Unity compilation and playtesting. Open GameplayTest and use **Hat Hop > Apply Movement and Camera Update**, then save the scene. See [setup and checks](Docs/MOVEMENT_CAMERA_UPDATE.md).
+The user has tested the revised movement and camera and chosen a scene visual hop height of **0.4**.
 
-Prior user-reported checkpoints passed: rotation, hazards, death/respawn, exit/win, restart and a localhost Web build. These do not establish that the revised movement passes yet.
+The **combined menu and three-level milestone** is authored and awaiting Unity validation. Follow [combined setup and checks](Docs/THREE_LEVELS_AND_MENU.md): import Hat_Hop_Menu_And_Three_Levels.zip, then run **Hat Hop > Create Menu and Three Levels**. No separate menu ZIP is needed.
 
-Next: validate movement and camera, build larger Easy/Medium/Hard levels, add menus/progression, tune difficulty, and publish. Public hosting is deferred. Generated builds belong in ignored Builds/Web; pushing source does not rebuild the hosted game.
+- Play starts Easy; Level Select offers Easy, Medium and Hard.
+- Three progressively larger rooms with 15, 21 and 29 route landings, safe section platforms and side-alcove exits.
+- Easy/Medium completion offers Next Level; Hard has a final completion screen. All levels support Retry/Restart and Main Menu.
+- Static geometry checks passed for sampled traversal in both orientations. Unity compilation, live flips, full runs and browser tests are pending.
+
+See [layout overview](Docs/Three_Levels_Overview.png). Public hosting remains on hold until testing is complete. Automated rebuild/deployment from main is planned after the combined release, not configured. Builds belong in ignored Builds/Web.
 
 Assets and their .meta files, Packages, ProjectSettings and Docs belong in Git. Use feature branches, test before merging, and record actual contributions and AI assistance.
