@@ -19,7 +19,7 @@ namespace HatHop.Editor
         {
             public string key, title;
             public int sections;
-            public float roomWidth, roomHeight, traversalSeconds, warningSeconds;
+            public float roomWidth, roomHeight, traversalSeconds, warningSeconds, turnSeconds;
             public float[] accent;
             public Box[] platforms, hazards, bonusPlatforms;
             public Pocket[] pockets;
@@ -110,7 +110,7 @@ namespace HatHop.Editor
                 if (l.key != Keys[i] || l.platforms == null || l.platforms.Length < 2 ||
                     l.hazards == null || l.bonusPlatforms == null || l.pockets == null || l.stars == null || l.stars.Length != 5 || l.accent == null || l.accent.Length != 3 ||
                     l.roomWidth <= 0 || l.roomHeight <= 0 || l.sections < 1 || l.exitWidth <= 0 || l.exitHeight < 2 ||
-                    l.traversalSeconds <= 0 || l.warningSeconds <= 0)
+                    l.traversalSeconds <= 0 || l.warningSeconds <= 0 || l.turnSeconds <= 0)
                     throw new InvalidDataException("Invalid layout: " + Keys[i]);
                 foreach (Box p in l.platforms)
                     if (p.width < 0.7f || p.height <= 0 || Mathf.Abs(p.x) + p.width / 2 >= l.roomWidth / 2)
@@ -218,6 +218,7 @@ namespace HatHop.Editor
             rotation.Configure(map, motor, true);
             SetFloat(rotation, "traversalSeconds", layout.traversalSeconds);
             SetFloat(rotation, "warningSeconds", layout.warningSeconds);
+            SetFloat(rotation, "turnSeconds", layout.turnSeconds);
             LevelFlow flow = systems.AddComponent<LevelFlow>();
             flow.Configure(rotation, motor, map);
             // Includes the full rotating room radius; the old fixed 25-unit guard is insufficient for larger maps.

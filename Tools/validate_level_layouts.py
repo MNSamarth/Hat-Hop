@@ -141,12 +141,16 @@ def check(l):
     assert len(l['stars'])==5 and len(l['pockets'])==2
     assert len({(star['x'],star['y']) for star in l['stars']})==5
     assert all(not (p.get('seesaw') and p.get('redUnderside')) for p in l['platforms'])
-    for q in l['pockets']:
+    assert all(l[key] > 0 for key in ('traversalSeconds', 'warningSeconds', 'turnSeconds'))
+    for i,q in enumerate(l['pockets'], 1):
         assert q['width']-.2 > 2*HALF_X+.4
         assert abs(q['x'])+q['width']/2+.1 < l['roomWidth']/2-.2
         assert abs(q['y']+q['height']) < l['roomHeight']/2-.4
         # Even a best-case launch with feet at the mouth cannot touch the star.
-        minimum_star_bottom=q['height']-.55-.55*.38
+        star=next(s for s in l['stars'] if s['name']==f'Flip Star {i}')
+        assert abs(star['x']-q['x'])+.55*.38 < q['width']/2-.1
+        assert star['y']+.55*.38 < q['y']+q['height']-.1
+        minimum_star_bottom=star['y']-q['y']-.55*.38
         assert minimum_star_bottom>JUMP*JUMP/(2*GRAVITY)+2*HALF_Y
     for sign,mode in [(1,'upright'),(-1,'flipped')]:
         ps,solids,hazards,f,r,caps=geometry(l,sign)

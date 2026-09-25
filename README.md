@@ -20,9 +20,10 @@ The visible rabbit placeholder makes small cosmetic hops; the collision body sta
 
 The user has tested the revised movement and camera and chosen a scene visual hop height of **0.4**.
 
-The **stars and platform challenges revision** is authored and awaiting Unity validation. Follow [setup and playtests](Docs/STARS_AND_PLATFORM_CHALLENGES.md): import Hat_Hop_Stars_And_Platform_Challenges.zip, then run **Hat Hop > Create Stars and Platform Challenge Levels**. This includes menu and all three levels; no earlier ZIP is needed.
+The **stars and platform challenges revision** is authored and awaiting Unity validation. Follow [setup and playtests](Docs/STARS_AND_PLATFORM_CHALLENGES.md): import Hat_Hop_Compact_Pockets_Faster_Flips.zip, then run **Hat Hop > Create Stars and Platform Challenge Levels**. This includes menu and all three levels; no earlier ZIP is needed.
 
-- Five stars per level, including two deep pockets that require a world flip to enter.
+- Five stars per level, including two compact pockets (1.4 wide, 3.3 deep) whose stars require a world flip.
+- Faster flips: Easy/Medium/Hard traversal is 5/4/3 seconds, followed by a 1-second warning and a 0.3-second turn.
 - A 0-5 star completion result and best completed score in the HUD and Level Select. Death/restart resets the current attempt's collectibles.
 - Floating exit direction marker on the right while the goal is offscreen.
 - Medium and Hard introduce red undersides; Hard adds two delayed seesaws and elevated jumps that require a raised tip when upright.

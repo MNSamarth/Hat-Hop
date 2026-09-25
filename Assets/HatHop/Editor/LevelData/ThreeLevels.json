@@ -6,8 +6,8 @@
       "sections": 3,
       "roomWidth": 16,
       "roomHeight": 22.52,
-      "traversalSeconds": 10,
-      "warningSeconds": 2.0,
+      "traversalSeconds": 5.0,
+      "warningSeconds": 1.0,
       "accent": [
         0.2,
         0.75,
@@ -131,16 +131,16 @@
           "anchor": 2,
           "x": 6.6,
           "y": -5.66,
-          "width": 2.0,
-          "height": 3.6
+          "width": 1.4,
+          "height": 3.3
         },
         {
           "name": "Flip Star Pocket 2",
           "anchor": 8,
           "x": -6.6,
           "y": 0.94,
-          "width": 2.0,
-          "height": 3.6
+          "width": 1.4,
+          "height": 3.3
         }
       ],
       "bonusPlatforms": [
@@ -187,19 +187,20 @@
         {
           "name": "Flip Star 1",
           "x": 6.6,
-          "y": -2.61
+          "y": -2.91
         },
         {
           "name": "Flip Star 2",
           "x": -6.6,
-          "y": 3.99
+          "y": 3.69
         },
         {
           "name": "Exit Approach Star",
           "x": 0,
           "y": 7.14
         }
-      ]
+      ],
+      "turnSeconds": 0.3
     },
     {
       "key": "Medium",
@@ -207,8 +208,8 @@
       "sections": 5,
       "roomWidth": 18,
       "roomHeight": 31.12,
-      "traversalSeconds": 8,
-      "warningSeconds": 2.0,
+      "traversalSeconds": 4.0,
+      "warningSeconds": 1.0,
       "accent": [
         0.64,
         0.49,
@@ -398,16 +399,16 @@
           "anchor": 6,
           "x": -7.1,
           "y": -4.96,
-          "width": 2.0,
-          "height": 3.6
+          "width": 1.4,
+          "height": 3.3
         },
         {
           "name": "Flip Star Pocket 2",
           "anchor": 9,
           "x": 7.1,
           "y": -1.33,
-          "width": 2.0,
-          "height": 3.6
+          "width": 1.4,
+          "height": 3.3
         }
       ],
       "bonusPlatforms": [
@@ -454,19 +455,20 @@
         {
           "name": "Flip Star 1",
           "x": -7.1,
-          "y": -1.91
+          "y": -2.21
         },
         {
           "name": "Flip Star 2",
           "x": 7.1,
-          "y": 1.72
+          "y": 1.42
         },
         {
           "name": "Exit Approach Star",
           "x": -1.4,
           "y": 11.34
         }
-      ]
+      ],
+      "turnSeconds": 0.3
     },
     {
       "key": "Hard",
@@ -474,8 +476,8 @@
       "sections": 7,
       "roomWidth": 20,
       "roomHeight": 44.34,
-      "traversalSeconds": 6,
-      "warningSeconds": 2.0,
+      "traversalSeconds": 3.0,
+      "warningSeconds": 1.0,
       "accent": [
         0.98,
         0.6,
@@ -745,16 +747,16 @@
           "anchor": 6,
           "x": -7.1,
           "y": -11.09,
-          "width": 2.0,
-          "height": 3.6
+          "width": 1.4,
+          "height": 3.3
         },
         {
           "name": "Flip Star Pocket 2",
           "anchor": 18,
           "x": -7.1,
           "y": 4.96,
-          "width": 2.0,
-          "height": 3.6
+          "width": 1.4,
+          "height": 3.3
         }
       ],
       "bonusPlatforms": [
@@ -801,19 +803,20 @@
         {
           "name": "Flip Star 1",
           "x": -7.1,
-          "y": -8.04
+          "y": -8.34
         },
         {
           "name": "Flip Star 2",
           "x": -7.1,
-          "y": 8.01
+          "y": 7.71
         },
         {
           "name": "Raised Tip Star",
           "x": 4.5,
           "y": 9.42
         }
-      ]
+      ],
+      "turnSeconds": 0.3
     }
   ]
 }

@@ -91,11 +91,11 @@ The first larger layouts are authored in Assets/HatHop/Editor/LevelData/ThreeLev
 
 | Level | Room size / route landings | Learning or challenge |
 | --- | --- | --- |
-| Easy: The Foyer | 16 x 22.52 / 15 | Three sections, broad landings, no interior hazards, 10-second traversal before warning. |
-| Medium: False Bottom | 18 x 31.12 / 21 | Five sections, longer sweeps, red undersides and flip-star pockets, 8-second traversal. |
-| Hard: The Last Act | 20 x 44.34 / 29 | Seven sections, precision platforms, red undersides, flip-star pockets and two seesaw jumps, 6-second traversal. |
+| Easy: The Foyer | 16 x 22.52 / 15 | Three sections, broad landings, no interior hazards, 5-second traversal before warning. |
+| Medium: False Bottom | 18 x 31.12 / 21 | Five sections, longer sweeps, red undersides and flip-star pockets, 4-second traversal. |
+| Hard: The Last Act | 20 x 44.34 / 29 | Seven sections, precision platforms, red undersides, flip-star pockets and two seesaw jumps, 3-second traversal. |
 
-Warnings stay at two seconds and turns at 0.6 seconds. All layouts use the same motor, 0.4 visual hop height and camera size 5. The level boundary-distance guard scales with the room radius instead of the old fixed 25 units. The generator creates a separate material and sprite and preserves older test scenes.
+Generated levels now use one-second warnings and 0.3-second turns; all three flip phases were halved for quicker decisions. Gold pockets are narrower (1.4 units) and shallower (3.3 units), with stars repositioned to preserve flip-only collection. All layouts use the same motor, 0.4 visual hop height and camera size 5. The level boundary-distance guard scales with the room radius instead of the old fixed 25 units. The generator creates a separate material and sprite and preserves older test scenes.
 
 Side-alcove exits have solid roofs/floors/back walls to block direct vertical wins in both orientations. Descending into an inverted exit requires going around its open side. Static sampled trajectory checks cover adjacent platforms and both exit approaches; they do not establish that live flips or final difficulty are fair. Playtest each layout in Unity and tune from actual results. Keep both orientations traversable and avoid offscreen lethal surprises.
 

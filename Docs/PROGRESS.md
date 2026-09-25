@@ -15,6 +15,8 @@ Updated September 25, 2026. Gameplay results below are user reports from the Win
 
 User authorized five-star collection, required flips for some stars, Hard seesaws used as raised jump launch points, red undersides, and a mandatory right-side goal indicator. Source is authored locally on feature/stars-platforms; the user has not yet reported tests of this revision.
 
+Latest requested tuning: hollow pockets reduced from 2.0 x 3.6 to 1.4 x 3.3, with relocated pocket stars. All flip phases halved: traversal 5/4/3 seconds, warning 1 second, turn 0.3 seconds. Requires regenerating the menu/three levels; faster live timing and smaller openings need user playtesting.
+
 Included: four new runtime components (StarCollectible, LevelStars, ExitIndicator, SeesawPlatform); generated star/arrow art; a lifecycle reset event; deferred scoring integrated with death/goal priority; result icons, best-score menu labels and updated level layouts. The combined generator includes menu and all three levels.
 
 Geometry checks passed for upright and flipped routes, red-face detours, gold-pocket entry, escape/recovery paths and the two raised-tip jumps. Neutral jumps fail those elevated transitions. The validator now models oriented rectangles and ceiling stops. It is an approximate static motion check, not Unity or execution of the C# mechanics.

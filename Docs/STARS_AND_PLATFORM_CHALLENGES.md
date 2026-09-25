@@ -15,14 +15,14 @@ Existing A/D movement, jump speed, coyote/buffer settings, 0.4 visual hop height
 
 ## Why the pocket stars require a flip
 
-Each golden pocket is 3.6 units deep, closed at the top and sides, with its mouth at the bottom in the original orientation. The star sits near the closed cap. Its pickup zone is higher than the player's maximum reach from the mouth, even allowing the full collision-body height. There is no orientation-lock flag: the geometry is what prevents collection before a flip.
+Each golden pocket is 1.4 units wide and 3.3 units deep (previously 2.0 by 3.6), closed at the top and sides, with its mouth at the bottom in the original orientation. The star sits near the closed cap. Its pickup zone is higher than the player's maximum reach from the mouth, even allowing the full collision-body height. There is no orientation-lock flag: the geometry is what prevents collection before a flip.
 
 Once inverted, the mouth faces upward and the player can descend into the pocket. The pocket may hold the player until the next scheduled flip. These are optional star detours; the timer remains visible. After flipping back, steer toward the center of the map on the way out, using the colored recovery shelf and return step below the mouth. Missing a star does not permanently remove it; later flips provide another chance, subject to surviving and navigating back.
 
 ## Install and generate
 
 1. Stop Play Mode and save your scenes. Commit the current tested checkpoint before regenerating layouts. Use a feature branch such as `feature/stars-platforms` from that checkpoint.
-2. Extract **Hat_Hop_Stars_And_Platform_Challenges.zip**. Merge **Assets**, **Docs**, **Tools** and **README.md** into the project root, replacing the included files. This includes the earlier menu/level source, so use only this ZIP. It does not replace .git, Packages or ProjectSettings directly.
+2. Extract **Hat_Hop_Compact_Pockets_Faster_Flips.zip**. Merge **Assets**, **Docs**, **Tools** and **README.md** into the project root, replacing the included files. This includes the earlier menu/level source, so use only this ZIP. It does not replace .git, Packages or ProjectSettings directly.
 3. Let Unity finish compiling. If red errors appear, copy the first full error before running setup.
 4. Select **Hat Hop > Create Stars and Platform Challenge Levels**. The older Create Menu and Three Levels command is an alias for the same updated generator. Accept the replacement dialog only after saving the previous checkpoint: it regenerates MainMenu, Easy, Medium and Hard, resets their layout edits, refreshes their catalog mapping and generated icons. Older test scenes are preserved, though shared lifecycle/HUD scripts are updated.
 5. Check the active Build Profile includes enabled MainMenu first, followed by Easy, Medium and Hard. A profile with Override Global Scene List needs its own matching entries. Press Play from MainMenu.
@@ -31,11 +31,13 @@ The new components and Inspector references are added automatically. Do not manu
 
 ## Level contents
 
-| Level | Flip-only stars | Red undersides | Seesaws | Traversal / warning |
+| Level | Flip-only stars | Red undersides | Seesaws | Traversal / warning / turn |
 | --- | --- | --- | --- | --- |
-| Easy | Two pockets | None | None | 10 s / 2 s |
-| Medium | Two pockets | Landings 03 and 15 | None | 8 s / 2 s |
-| Hard | Two pockets | Landings 03, 15 and 27 | Landings 08 and 20 | 6 s / 2 s |
+| Easy | Two pockets | None | None | 5 s / 1 s / 0.3 s |
+| Medium | Two pockets | Landings 03 and 15 | None | 4 s / 1 s / 0.3 s |
+| Hard | Two pockets | Landings 03, 15 and 27 | Landings 08 and 20 | 3 s / 1 s / 0.3 s |
+
+Traversal, warning and turn animation durations are all half the previous values. From the start of traversal, a flip starts after 6 / 5 / 4 seconds in Easy / Medium / Hard. A full cycle also includes the 0.3-second turn and a physics contact-refresh step. The shorter warning still permits movement. Old test scenes retain their existing timing.
 
 Hard is now 44.34 units high because its two elevated transitions were raised. Easy and Medium remain 22.52 and 31.12 units high. Each level still has five stars total. Some older red edge blocks were removed around pocket approaches so they do not obstruct the new detours. See Three_Levels_Overview.png for the updated design diagram, not a Unity screenshot.
 
@@ -62,7 +64,8 @@ Hard is now 44.34 units high because its two elevated transitions were raised. E
 
 - In the original orientation, try to reach each deep pocket star from below; normal jumping must not reach it.
 - After a flip, enter from above and collect it. After the next flip, exit toward the center and use the recovery ledges to rejoin.
-- Verify both pocket detours remain doable during actual scheduled flips, not just when the world is stationary.
+- Check the new 1-second warning and 0.3-second turn feel readable, particularly when preparing a Hard seesaw jump.
+- Verify both smaller pocket detours remain doable during actual scheduled flips, not just when the world is stationary.
 - Stand on a marked platform's safe top; then test its red underside and the flipped red top. Only the marked face and existing red hazards are lethal.
 - Before flipping near a red platform, identify a reachable safe landing. Report any unavoidable death sequence for route/timing adjustment.
 
@@ -103,7 +106,7 @@ Stop Play Mode and save, then:
 git add Assets/HatHop Docs Tools README.md ProjectSettings/EditorBuildSettings.asset
 git --no-pager diff --cached --stat
 git diff --cached --check
-git commit -m "Add star ratings, exit guidance and platform challenges"
+git commit -m "Shrink hollow pockets and halve level flip timings"
 git push -u origin HEAD
 git status
 ```
