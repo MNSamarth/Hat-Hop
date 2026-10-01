@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LevelCatalog
   m_EditorClassIdentifier: Assembly-CSharp::HatHop.LevelCatalog
   prototypeScenePath: Assets/HatHop/Scenes/GameplayTest.unity
+  prologueScenePath: Assets/HatHop/Scenes/Prologue.unity
   easyScenePath: Assets/HatHop/Scenes/Easy.unity
   mediumScenePath: Assets/HatHop/Scenes/Medium.unity
   hardScenePath: Assets/HatHop/Scenes/Hard.unity

@@ -1,34 +1,29 @@
-# Hat Hop
+# Leap of Faith
 
-A Unity 2D platformer where warned 180-degree world rotations turn upward climbs into dangerous descents. Developed for USC CSCI 526.
+A Unity 2D platformer built around timed world flips, precision jumps, collectible stars and finding the exit. Built for USC CSCI 526 with Unity **6000.3.23f1**, 2D Built-In.
 
-## Development setup
+- **A/D or Left/Right:** move and steer in the air.
+- **Space or Up:** jump. Holding a jump key does not repeat jumps.
+- **R / Restart:** restart the current run. **Home:** return to the menu.
+- **Beginner, Easy, Medium:** 6-second countdown, including a 1-second warning.
+- **Hard:** 5-second countdown, including a 1-second warning.
 
-Use Unity **6000.3.23f1**, the **2D Built-In Render Pipeline**, and matching Web Build Support. Open the Unity project root containing Assets, Packages and ProjectSettings.
+Beginner offers safe practice. Easy and Medium build on the movement and flip mechanics. Hard is a wide circuit: cross the lower deck, climb the east tower, traverse the upper bridge, and return through the west wing to the central exit. Light both outer pads to unlock that exit. Raised seesaw tips, red undersides and optional flip-star pockets create extra decisions. Five stars per level provide a saved best completion rating.
 
-Read [the development guide](Docs/Hat_Hop_Development_Guide.md) and [progress](Docs/PROGRESS.md) before changing mechanics.
+The menu uses abstract platforms and a square, with no story or character theme. Gameplay keeps the flip countdown, EXIT indicator and text navigation buttons. Completion shows stars, Restart and Next/Home.
 
-## Current controls
+## Apply this update
 
-- **A/D:** ground movement and air steering.
-- **Space:** a real jump when grounded, with a short landing buffer and edge grace.
-- **R:** restart the run.
+Import the patch into your existing tested four-level project, then run **Leap of Faith > Apply Latest Update** outside Play Mode. This rebuilds **MainMenu and Hard only**, updates the other levels' timers in place, and sets the product name. Easy and Medium geometry stays intact. Save or commit manual edits first.
 
-The visible rabbit placeholder makes small cosmetic hops; the collision body stays grounded until a real jump or fall. The camera follows at approximately 2x the former overview magnification.
+See [integration and checks](Docs/LEAP_OF_FAITH_UPDATE.md), [Hard layout](Docs/Hard_Circuit_Overview.png) and [progress](Docs/PROGRESS.md).
 
-## Current revision
+## Build and publish
 
-The user has tested the revised movement and camera and chosen a scene visual hop height of **0.4**.
+**Leap of Faith > Build Web Release** produces `Builds/WebGL`. Test it over HTTP. Existing Web publishing scripts and opt-in CI workflows remain available; see the publishing section of [the earlier release guide](Docs/THE_LAST_TRICK_RELEASE.md). Generate, test and commit scenes before building; source changes alone do not update a hosted game.
 
-The **stars and platform challenges revision** is authored and awaiting Unity validation. Follow [setup and playtests](Docs/STARS_AND_PLATFORM_CHALLENGES.md): import Hat_Hop_Compact_Pockets_Faster_Flips.zip, then run **Hat Hop > Create Stars and Platform Challenge Levels**. This includes menu and all three levels; no earlier ZIP is needed.
+This patch has source and sampled geometry checks. Unity compilation, live gameplay and a rebuilt Web release still require local verification. No new hosted deployment is claimed.
 
-- Five stars per level, including two compact pockets (1.4 wide, 3.3 deep) whose stars require a world flip.
-- Faster flips: Easy/Medium/Hard traversal is 5/4/3 seconds, followed by a 1-second warning and a 0.3-second turn.
-- A 0-5 star completion result and best completed score in the HUD and Level Select. Death/restart resets the current attempt's collectibles.
-- Floating exit direction marker on the right while the goal is offscreen.
-- Medium and Hard introduce red undersides; Hard adds two delayed seesaws and elevated jumps that require a raised tip when upright.
-- Play/Level Select, Next Level, Retry and Main Menu remain connected across all three difficulties.
+## Repository compatibility
 
-See the [updated design overview](Docs/Three_Levels_Overview.png). Sampled geometry checks passed for routes, red-face detours, flip pockets and raised-tip reach. Unity compilation, moving-platform physics, saved-score behavior and full gameplay/browser tests are pending. Public hosting and automated deployment remain on hold until testing is complete.
-
-Assets and their .meta files, Packages, ProjectSettings and Docs belong in Git. Use feature branches, test before merging, and record actual contributions and AI assistance.
+The existing [Hat-Hop repository](https://github.com/MNSamarth/Hat-Hop), `Assets/HatHop` paths, C# namespace, Unity asset GUIDs, application identifiers and score keys are retained for compatibility. The visible game/product title is **Leap of Faith**. Historical guide filenames and archive names refer to earlier revisions. Do not rename folders in Explorer inside Assets; coordinate scene ownership with your teammate.

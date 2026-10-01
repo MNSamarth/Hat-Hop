@@ -36,7 +36,7 @@ namespace HatHop
             float width = Mathf.Min(440, Screen.width - 24);
             GUI.Box(new Rect(12, 12, width, 142), GUIContent.none);
             GUI.Label(new Rect(24, 20, width - 24, 130),
-                "HAT HOP — ROTATION TEST\nA / D move | Space jumps | R resets\n" +
+                "LEAP OF FAITH — ROTATION TEST\nA / D or arrows move | Space / Up jumps | R resets\n" +
                 status + $"\nCompleted flips: {controller.CompletedTurns}", textStyle);
         }
     }

@@ -81,7 +81,12 @@ namespace HatHop
             if (!AcceptsPlayerContact(enteringBody)) return;
             // Death, stars and exit are resolved once at the next physics boundary.
             if (kind == LevelTrigger2D.Kind.Hazard) hazardPending = true;
-            else goalPending = true;
+            else
+            {
+                TutorialGuide tutorial = GetComponent<TutorialGuide>();
+                HardRouteGate gate = GetComponent<HardRouteGate>();
+                if ((tutorial == null || tutorial.CanExit) && (gate == null || gate.CanExit)) goalPending = true;
+            }
         }
 
         private void ResetLevelObjects()

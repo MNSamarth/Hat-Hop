@@ -1,3 +1,5 @@
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
 # Main menu milestone
 
 **Current update:** use STARS_AND_PLATFORM_CHALLENGES.md and its combined ZIP. This file records the earlier milestone; the latest JSON and challenge guide define current layouts and scoring.
@@ -19,7 +21,7 @@ The menu uses Unity UI (uGUI), a scaled Canvas, standard buttons, a hopping geom
 2. From your project terminal, check `git status`. If the movement checkpoint is saved and you are still on feature/movement-camera, run `git switch -c feature/main-menu`. If that branch already exists, switch to it without `-c`. Do not switch to an older main that lacks the tested movement update.
 3. Extract Hat_Hop_Main_Menu_Milestone.zip outside the project. Copy its **Assets**, **Docs** and **README.md** into the project root; merge folders and replace the included files. The patch contains no .git, Packages, ProjectSettings or .unity files. Existing gameplay scenes and movement scripts are preserved. GameplayHUD.cs is the only replaced gameplay script; retain its existing .meta.
 4. Return to Unity and wait for compilation. The menu requires Unity UI (com.unity.ugui), normally installed in the template, and uses the project's existing Input System when enabled. If Unity reports errors, copy the first complete red error before proceeding.
-5. Select **Hat Hop > Create Main Menu Scene**. Accept saving the current scene if prompted. This creates and opens `Assets/HatHop/Scenes/MainMenu.unity`, and creates `Assets/HatHop/Settings/LevelCatalog.asset`. A second run asks before replacing MainMenu; it preserves the existing catalog and all gameplay scenes.
+5. Select **Leap of Faith > Create Main Menu Scene**. Accept saving the current scene if prompted. This creates and opens `Assets/HatHop/Scenes/MainMenu.unity`, and creates `Assets/HatHop/Settings/LevelCatalog.asset`. A second run asks before replacing MainMenu; it preserves the existing catalog and all gameplay scenes.
 6. Open **File > Build Profiles > Scene List**. Confirm MainMenu is first and enabled, with GameplayTest also enabled. The generator updates the global scene list. If the active profile has **Override Global Scene List** checked, include those scenes in that profile too, with MainMenu first. Do not regenerate GameplayTest or rerun the movement setup for this milestone.
 7. Return to MainMenu, press Play and click inside the Game view.
 

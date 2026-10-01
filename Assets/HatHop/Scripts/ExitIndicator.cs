@@ -19,7 +19,7 @@ namespace HatHop
                 flow.State != LevelFlow.RunState.Playing || SceneNavigation.IsLoading) return;
             Vector3 point = view.WorldToViewportPoint(exit.position);
             Vector2 goalOnGUI = new Vector2(point.x * Screen.width, (1 - point.y) * Screen.height);
-            Rect hud = new Rect(12, 12, Mathf.Min(460, Screen.width - 24), 178);
+            Rect hud = GameplayHUD.TimerRect;
             bool clearlyVisible = point.z > 0 && point.x > 0.06f && point.x < 0.94f &&
                 point.y > 0.12f && point.y < 0.92f && !hud.Contains(goalOnGUI);
             if (clearlyVisible) return;

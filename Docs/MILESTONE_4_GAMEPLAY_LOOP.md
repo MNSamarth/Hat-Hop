@@ -1,3 +1,5 @@
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
 # Milestone 4 Gameplay Loop
 
 Unity 6000.3.23f1, 2D Built-In Render Pipeline. Source prepared; import, compilation, Play Mode and browser checks pending.
@@ -12,7 +14,7 @@ The user reports Milestone 3 rotation, movement resume and reset working correct
 2. On the branch containing the working rotation milestone, run `git switch -c feature/gameplay-loop`. Do not switch to an older main branch first.
 3. Close Unity. Extract Hat_Hop_Gameplay_Milestone.zip, then merge its Assets and Docs folders into the project root.
 4. Allow replacement of **RotationController.cs only**. Keep its existing .meta file. All other files in the patch are new. There are no .git, package, settings, or scene files in the archive.
-5. Reopen Unity. After compilation, select **Hat Hop > Create Gameplay Test Scene**. It generates and saves Assets/HatHop/Scenes/GameplayTest.unity with its own GameplaySquare sprite. Save the currently open scene if prompted.
+5. Reopen Unity. After compilation, select **Leap of Faith > Create Gameplay Test Scene**. It generates and saves Assets/HatHop/Scenes/GameplayTest.unity with its own GameplaySquare sprite. Save the currently open scene if prompted.
 6. Press Play and focus the Game view. Prefer a 16:9 or other landscape Game view.
 
 ## Controls and rules

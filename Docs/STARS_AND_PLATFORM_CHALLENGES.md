@@ -1,3 +1,7 @@
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
+> Historical three-level revision. Use [Leap of Faith release](THE_LAST_TRICK_RELEASE.md) for the current four-level package and deployment.
+
 # Stars and platform challenges
 
 September 25, 2026. Combined source update for Unity 6000.3.23f1, 2D Built-In. This ZIP contains the main menu, three-level generator and this revision together. It builds on the working grounded movement/camera project; do not apply earlier menu/level ZIPs afterward.
@@ -24,7 +28,7 @@ Once inverted, the mouth faces upward and the player can descend into the pocket
 1. Stop Play Mode and save your scenes. Commit the current tested checkpoint before regenerating layouts. Use a feature branch such as `feature/stars-platforms` from that checkpoint.
 2. Extract **Hat_Hop_Compact_Pockets_Faster_Flips.zip**. Merge **Assets**, **Docs**, **Tools** and **README.md** into the project root, replacing the included files. This includes the earlier menu/level source, so use only this ZIP. It does not replace .git, Packages or ProjectSettings directly.
 3. Let Unity finish compiling. If red errors appear, copy the first full error before running setup.
-4. Select **Hat Hop > Create Stars and Platform Challenge Levels**. The older Create Menu and Three Levels command is an alias for the same updated generator. Accept the replacement dialog only after saving the previous checkpoint: it regenerates MainMenu, Easy, Medium and Hard, resets their layout edits, refreshes their catalog mapping and generated icons. Older test scenes are preserved, though shared lifecycle/HUD scripts are updated.
+4. Select **Leap of Faith > Create Stars and Platform Challenge Levels**. The older Create Menu and Three Levels command is an alias for the same updated generator. Accept the replacement dialog only after saving the previous checkpoint: it regenerates MainMenu, Easy, Medium and Hard, resets their layout edits, refreshes their catalog mapping and generated icons. Older test scenes are preserved, though shared lifecycle/HUD scripts are updated.
 5. Check the active Build Profile includes enabled MainMenu first, followed by Easy, Medium and Hard. A profile with Override Global Scene List needs its own matching entries. Press Play from MainMenu.
 
 The new components and Inspector references are added automatically. Do not manually attach StarCollectible, LevelStars, ExitIndicator or SeesawPlatform, and do not rerun the movement setup on these generated scenes.

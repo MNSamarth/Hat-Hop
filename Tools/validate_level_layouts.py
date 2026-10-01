@@ -112,7 +112,10 @@ def geometry(l, sign):
         caps.append(cap);solids.append(cap)
         solids += [transformed(box(q['x']+side*q['width']/2,q['y']+q['height']/2,.2,q['height']+.2),sign) for side in [-1,1]]
     hazards=[transformed(h,sign) for h in l['hazards']]
-    hazards += [transformed(box(0,side*l['roomHeight']/2,l['roomWidth'],.8),sign) for side in [-1,1]]
+    if l.get('tutorial'):
+        solids += [transformed(box(0,side*(l['roomHeight']/2-.35),l['roomWidth'],.4),sign) for side in [-1,1]]
+    else:
+        hazards += [transformed(box(0,side*l['roomHeight']/2,l['roomWidth'],.8),sign) for side in [-1,1]]
     for p in l['platforms']:
         if p.get('redUnderside'):hazards.append(transformed(box(p['x'],p['y']-.6*p['height'],p['width'],p['height']*.25),sign))
     return ps,solids,hazards,f,r,caps
@@ -138,10 +141,14 @@ def pocket_escape(q, target, solids, hazards):
 
 def check(l):
     failed=[]
-    assert len(l['stars'])==5 and len(l['pockets'])==2
+    assert len(l['stars'])==5 and len(l['pockets'])==(0 if l.get('tutorial') else 2)
     assert len({(star['x'],star['y']) for star in l['stars']})==5
     assert all(not (p.get('seesaw') and p.get('redUnderside')) for p in l['platforms'])
     assert all(l[key] > 0 for key in ('traversalSeconds', 'warningSeconds', 'turnSeconds'))
+    if 'exitPads' in l:
+        assert l['key'] == 'Hard' and len(l['exitPads']) == 2 and len(set(l['exitPads'])) == 2
+        assert all(0 <= i < len(l['platforms']) and not l['platforms'][i].get('redUnderside') and not l['platforms'][i].get('seesaw') for i in l['exitPads'])
+        assert l['platforms'][l['exitPads'][0]]['x'] > 0 > l['platforms'][l['exitPads'][1]]['x']
     for i,q in enumerate(l['pockets'], 1):
         assert q['width']-.2 > 2*HALF_X+.4
         assert abs(q['x'])+q['width']/2+.1 < l['roomWidth']/2-.2
@@ -159,14 +166,14 @@ def check(l):
             start,target=ps[a],ps[b]
             if sign==1 and start.get('seesaw'):
                 if trajectory(start,target,solids,hazards):failed.append(f'neutral seesaw {a} unexpectedly reaches ledge')
-                start['angle']=18
+                start['angle']=18 if target['x']>start['x'] else -18
             okay=trajectory(start,target,solids,hazards)
             if not okay and sign==-1:
                 okay=any(side_entry(start,target,solids,hazards,side) for side in [-1,1])
             if not okay:
                 helpers=[p for p in solids if p.get('name','').startswith('Pocket ') and abs(p['y']-start['y'])<4]
                 for helper in helpers:
-                    if trajectory(start,helper,solids,hazards) and trajectory(helper,target,solids,hazards):
+                    if (trajectory(start,helper,solids,hazards) or any(side_entry(start,helper,solids,hazards,side) for side in [-1,1])) and (trajectory(helper,target,solids,hazards) or any(side_entry(helper,target,solids,hazards,side) for side in [-1,1])):
                         okay=True;break
             if not okay:failed.append(f'{mode} {a}->{b}')
             start.pop('angle',None)
@@ -180,7 +187,7 @@ def check(l):
                 step=next(p for p in solids if p.get('name')==f'Pocket {i+1} Return Step')
                 if not pocket_escape(q,recovery,solids,hazards):failed.append(f'pocket {i+1} escape')
                 if not trajectory(recovery,step,solids,hazards):failed.append(f'pocket {i+1} return step')
-                if not trajectory(step,ps[q['anchor']-1],solids,hazards):failed.append(f'pocket {i+1} rejoin')
+                if not trajectory(step,ps[q.get('rejoin',q['anchor']-1)],solids,hazards):failed.append(f'pocket {i+1} rejoin')
     print(l['key']+': '+('PASS' if not failed else ', '.join(failed)),flush=True)
     return failed
 
@@ -188,6 +195,8 @@ def check(l):
 if __name__=='__main__':
     failures=[]
     for level in json.loads(SOURCE.read_text())['levels']:
+        if level['key'] == 'Hard':
+            level = json.loads(SOURCE.with_name('HardCircuit.json').read_text())
         failures += [level['key']+': '+problem for problem in check(level)]
     assert not failures, '\n'.join(failures)
     print('Sampled static routes, red-face detours, flip pocket entry/escape and raised-tip reach passed. Live physics tests remain pending.')

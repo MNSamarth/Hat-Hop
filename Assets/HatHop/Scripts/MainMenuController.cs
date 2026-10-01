@@ -17,6 +17,7 @@ namespace HatHop
         [SerializeField] private Button levelsButton;
         [SerializeField] private Button controlsButton;
         [SerializeField] private Button easyButton;
+        [SerializeField] private Button prologueButton;
         [SerializeField] private Button mediumButton;
         [SerializeField] private Button hardButton;
         [SerializeField] private Button levelsBack;
@@ -27,7 +28,7 @@ namespace HatHop
 
         public void Configure(LevelCatalog levels, GameObject home, GameObject select,
             GameObject controls, Button play, Button choose, Button help, Button easy,
-            Button medium, Button hard, Button backFromLevels, Button backFromControls,
+            Button medium, Button hard, Button prologue, Button backFromLevels, Button backFromControls,
             Text message, RectTransform mascot)
         {
             catalog = levels;
@@ -40,6 +41,7 @@ namespace HatHop
             easyButton = easy;
             mediumButton = medium;
             hardButton = hard;
+            prologueButton = prologue;
             levelsBack = backFromLevels;
             controlsBack = backFromControls;
             status = message;
@@ -53,7 +55,7 @@ namespace HatHop
                 easyButton == null || mediumButton == null || hardButton == null ||
                 levelsBack == null || controlsBack == null || status == null)
             {
-                Debug.LogError("Main menu references are incomplete. Recreate it with Hat Hop > Create Main Menu Scene.", this);
+                Debug.LogError("Main menu references are incomplete. Recreate it with Leap of Faith > Create Main Menu Scene.", this);
                 enabled = false;
                 return;
             }
@@ -67,6 +69,7 @@ namespace HatHop
 #endif
             if (rabbit != null) rabbitRest = rabbit.anchoredPosition;
             playButton.interactable = SceneNavigation.CanLoad(catalog.PlayScenePath);
+            if (prologueButton != null) BindLevel(prologueButton, "BEGINNER", catalog.prologueScenePath, 3);
             BindLevel(easyButton, "EASY", catalog.easyScenePath, 0);
             BindLevel(mediumButton, "MEDIUM", catalog.mediumScenePath, 1);
             BindLevel(hardButton, "HARD", catalog.hardScenePath, 2);

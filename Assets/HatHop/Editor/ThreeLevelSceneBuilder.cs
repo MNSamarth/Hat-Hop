@@ -7,21 +7,23 @@ using UnityEngine.SceneManagement;
 
 namespace HatHop.Editor
 {
-    // The JSON is the single layout source, also read by Tools/validate_level_layouts.py.
+    // Layout data are shared with Tools/validate_level_layouts.py. Hard has a separate override.
     public static class ThreeLevelSceneBuilder
     {
         private const string Root = "Assets/HatHop";
         private const string LayoutPath = Root + "/Editor/LevelData/ThreeLevels.json";
-        private static readonly string[] Keys = { "Easy", "Medium", "Hard" };
+        private static readonly string[] Keys = { "Easy", "Medium", "Hard", "Prologue" };
 
         [Serializable] private sealed class LayoutSet { public Layout[] levels; }
         [Serializable] private sealed class Layout
         {
             public string key, title;
             public int sections;
+            public bool tutorial;
             public float roomWidth, roomHeight, traversalSeconds, warningSeconds, turnSeconds;
             public float[] accent;
-            public Box[] platforms, hazards, bonusPlatforms;
+            public Box[] platforms, hazards, bonusPlatforms, zones;
+            public int[] exitPads;
             public Pocket[] pockets;
             public Star[] stars;
             public float exitX, exitFloorY, exitWidth, exitHeight;
@@ -41,11 +43,19 @@ namespace HatHop.Editor
         }
         [Serializable] private sealed class Star { public string name; public float x, y; }
 
-        [MenuItem("Hat Hop/Create Stars and Platform Challenge Levels")]
+        [MenuItem("Leap of Faith/Create Stars and Platform Challenge Levels")]
         public static void CreateChallenges() => Create();
 
-        [MenuItem("Hat Hop/Create Menu and Three Levels")]
-        public static void Create()
+        [MenuItem("Leap of Faith/Create Menu and Three Levels")]
+        public static void Create() => Generate(true);
+
+        [MenuItem("Leap of Faith/Prepare Four-Level Release")]
+        public static void PrepareFourLevelRelease() => Generate(false);
+
+        [MenuItem("Leap of Faith/Apply Latest Update")]
+        public static void ApplyLatest() => Generate(false, true);
+
+        private static void Generate(bool allLevels, bool circuitOnly = false)
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -56,21 +66,25 @@ namespace HatHop.Editor
             try
             {
                 layouts = JsonUtility.FromJson<LayoutSet>(File.ReadAllText(LayoutPath));
+                layouts.levels[2] = JsonUtility.FromJson<Layout>(File.ReadAllText(Root + "/Editor/LevelData/HardCircuit.json"));
                 Validate(layouts);
+                if (circuitOnly) MinimalPresentationSetup.ValidateExistingScenes();
             }
             catch (Exception error)
             {
                 Debug.LogError("Level generation stopped before modifying scenes: " + error.Message);
                 return;
             }
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             bool replacing = File.Exists(SceneNavigation.MenuScenePath);
             foreach (string key in Keys) replacing |= File.Exists(ScenePath(key));
-            if (replacing && !EditorUtility.DisplayDialog("Rebuild menu and three levels?",
-                "This replaces MainMenu, Easy, Medium and Hard scenes and updates their LevelCatalog mappings and generated icons. " +
-                "Save or commit any manual edits first. GameplayTest and other test scenes are preserved.",
+            if (replacing && !Application.isBatchMode && !EditorUtility.DisplayDialog("Prepare Leap of Faith?",
+                (circuitOnly ? "This rebuilds MainMenu and Hard only. Beginner, Easy and Medium keep their layouts; their countdowns become 6 seconds. Hard is 5 seconds. " :
+                 allLevels ? "This rebuilds MainMenu and all four levels. " : "This rebuilds MainMenu, Prologue and Hard. Existing Easy and Medium scenes are preserved. ") +
+                "Save or commit manual edits to the replaced scenes first.",
                 "Rebuild", "Cancel")) return;
 
+            if (circuitOnly) MinimalPresentationSetup.ApplyExistingTimers();
             Directory.CreateDirectory(Root + "/Scenes");
             Directory.CreateDirectory(Root + "/Settings");
             Directory.CreateDirectory(Root + "/Art");
@@ -86,25 +100,29 @@ namespace HatHop.Editor
                 catalog = ScriptableObject.CreateInstance<LevelCatalog>();
                 AssetDatabase.CreateAsset(catalog, MainMenuSceneBuilder.CatalogPath);
             }
+            catalog.prologueScenePath = ScenePath("Prologue");
             catalog.easyScenePath = ScenePath("Easy");
             catalog.mediumScenePath = ScenePath("Medium");
             catalog.hardScenePath = ScenePath("Hard");
             EditorUtility.SetDirty(catalog);
-            for (int i = 0; i < layouts.levels.Length; i++) Build(layouts.levels[i], i, catalog, square, material, star, arrow);
+            for (int i = 0; i < layouts.levels.Length; i++)
+                if (allLevels || layouts.levels[i].key == "Hard" || (!circuitOnly && (layouts.levels[i].tutorial || !File.Exists(ScenePath(layouts.levels[i].key)))))
+                    Build(layouts.levels[i], i, catalog, square, material, star, arrow);
+            PlayerSettings.productName = "Leap of Faith";
             AssetDatabase.SaveAssets();
             if (!MainMenuSceneBuilder.Build(false))
             {
                 Debug.LogError("Levels saved, but menu creation did not complete. Run Create Main Menu Scene before testing.");
                 return;
             }
-            Debug.Log("Menu and three levels created. MainMenu is open. Test every difficulty and Next Level. " +
+            Debug.Log("Leap of Faith levels prepared. MainMenu is open. Test every difficulty and Next Level. " +
                 "Static layout checks are not a Unity playtest; verify Build Profile scene overrides before building.");
         }
 
         private static void Validate(LayoutSet set)
         {
-            if (set?.levels == null || set.levels.Length != 3) throw new InvalidDataException("Expected three layouts.");
-            for (int i = 0; i < 3; i++)
+            if (set?.levels == null || set.levels.Length != 4) throw new InvalidDataException("Expected four layouts.");
+            for (int i = 0; i < 4; i++)
             {
                 Layout l = set.levels[i];
                 if (l.key != Keys[i] || l.platforms == null || l.platforms.Length < 2 ||
@@ -112,6 +130,9 @@ namespace HatHop.Editor
                     l.roomWidth <= 0 || l.roomHeight <= 0 || l.sections < 1 || l.exitWidth <= 0 || l.exitHeight < 2 ||
                     l.traversalSeconds <= 0 || l.warningSeconds <= 0 || l.turnSeconds <= 0)
                     throw new InvalidDataException("Invalid layout: " + Keys[i]);
+                if (l.exitPads != null && (l.key != "Hard" || l.exitPads.Length != 2 ||
+                    l.exitPads[0] == l.exitPads[1] || Array.Exists(l.exitPads, n => n < 0 || n >= l.platforms.Length)))
+                    throw new InvalidDataException("Invalid Hard pad mapping.");
                 foreach (Box p in l.platforms)
                     if (p.width < 0.7f || p.height <= 0 || Mathf.Abs(p.x) + p.width / 2 >= l.roomWidth / 2)
                         throw new InvalidDataException("Invalid landing: " + p.name);
@@ -131,7 +152,17 @@ namespace HatHop.Editor
                 square, new Color(0.055f, 0.075f, 0.115f), false, -20);
             Transform decoration = new GameObject("Section Markers").transform;
             decoration.SetParent(map, false);
-            for (int s = 0; s < layout.sections; s++)
+            if (layout.zones != null && layout.zones.Length > 0)
+            {
+                for (int z = 0; z < layout.zones.Length; z++)
+                {
+                    Box zone = layout.zones[z];
+                    Color tint = Color.Lerp(new Color(.055f, .075f, .115f), accent, z % 2 == 0 ? .1f : .18f);
+                    BoxObject(zone.name, new Vector2(zone.x, zone.y), new Vector2(zone.width, zone.height),
+                        decoration, square, tint, false, -19);
+                }
+            }
+            else for (int s = 0; s < layout.sections; s++)
             {
                 Box p = layout.platforms[s * 4];
                 float nextY = s + 1 < layout.sections ? layout.platforms[(s + 1) * 4].y : layout.exitFloorY;
@@ -216,8 +247,8 @@ namespace HatHop.Editor
             GameObject systems = new GameObject("Gameplay Systems");
             RotationController rotation = systems.AddComponent<RotationController>();
             rotation.Configure(map, motor, true);
-            SetFloat(rotation, "traversalSeconds", layout.traversalSeconds);
-            SetFloat(rotation, "warningSeconds", layout.warningSeconds);
+            SetFloat(rotation, "traversalSeconds", layout.key == "Hard" ? MinimalPresentationSetup.HardTraversalSeconds : MinimalPresentationSetup.NormalTraversalSeconds);
+            SetFloat(rotation, "warningSeconds", MinimalPresentationSetup.WarningSeconds);
             SetFloat(rotation, "turnSeconds", layout.turnSeconds);
             LevelFlow flow = systems.AddComponent<LevelFlow>();
             flow.Configure(rotation, motor, map);
@@ -250,16 +281,56 @@ namespace HatHop.Editor
 
             Transform hazards = new GameObject("Hazards").transform;
             hazards.SetParent(map, false);
+            if (layout.tutorial)
+            {
+                BoxObject("Safe Floor", new Vector2(0, -layout.roomHeight / 2 + 0.35f),
+                    new Vector2(layout.roomWidth, 0.4f), platforms, square, accent);
+                BoxObject("Safe Ceiling", new Vector2(0, layout.roomHeight / 2 - 0.35f),
+                    new Vector2(layout.roomWidth, 0.4f), platforms, square, accent);
+            }
+            else
+            {
             Trigger("Bottom Hazard", new Vector2(0, -layout.roomHeight / 2),
                 new Vector2(layout.roomWidth, 0.8f), hazards, square, red, LevelTrigger2D.Kind.Hazard, flow);
             Trigger("Top Hazard", new Vector2(0, layout.roomHeight / 2),
                 new Vector2(layout.roomWidth, 0.8f), hazards, square, red, LevelTrigger2D.Kind.Hazard, flow);
+            }
             foreach (Box h in layout.hazards)
                 Trigger(h.name, new Vector2(h.x, h.y), new Vector2(h.width, h.height),
                     hazards, square, red, LevelTrigger2D.Kind.Hazard, flow);
             GameObject goal = Trigger("Exit", new Vector2(layout.exitX + 0.1f, layout.exitFloorY + layout.exitHeight / 2),
                 new Vector2(0.65f, layout.exitHeight - 0.5f), exit, square,
                 new Color(0.25f, 1f, 0.52f), LevelTrigger2D.Kind.Goal, flow);
+
+            if (layout.exitPads != null && layout.exitPads.Length == 2)
+            {
+                HardRouteGate gate = systems.AddComponent<HardRouteGate>();
+                RoutePad[] pads = new RoutePad[2];
+                SpriteRenderer[] lights = new SpriteRenderer[2];
+                for (int i = 0; i < 2; i++)
+                {
+                    Box landing = layout.platforms[layout.exitPads[i]];
+                    GameObject pad = new GameObject("Outer Pad " + (i + 1));
+                    pad.transform.SetParent(map, false);
+                    pad.transform.localPosition = new Vector3(landing.x, landing.y, 0);
+                    CircleCollider2D trigger = pad.AddComponent<CircleCollider2D>();
+                    trigger.radius = .9f;
+                    SpriteRenderer[] markers = new SpriteRenderer[2];
+                    for (int side = 0; side < 2; side++)
+                    {
+                        GameObject marker = BoxObject("Pad Light", new Vector2(0, side == 0 ? .65f : -.65f),
+                            new Vector2(.3f, .3f), pad.transform, square, Color.white, false, 4);
+                        marker.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                        markers[side] = marker.GetComponent<SpriteRenderer>();
+                    }
+                    pads[i] = pad.AddComponent<RoutePad>();
+                    pads[i].Configure(gate, i, markers);
+                    lights[i] = BoxObject("Gate Light " + (i + 1),
+                        new Vector2(layout.exitX - .6f + i * .65f, layout.exitFloorY + layout.exitHeight / 2),
+                        new Vector2(.22f, .22f), exit, square, Color.white, false, 8).GetComponent<SpriteRenderer>();
+                }
+                gate.Configure(flow, goal.GetComponent<SpriteRenderer>(), pads, lights);
+            }
 
             Camera camera = new GameObject("Main Camera").AddComponent<Camera>();
             camera.tag = "MainCamera";
@@ -271,6 +342,7 @@ namespace HatHop.Editor
             camera.gameObject.AddComponent<AudioListener>();
             camera.gameObject.AddComponent<PlayerFollowCamera>().Configure(motor, rotation, 10);
             systems.AddComponent<ExitIndicator>().Configure(camera, motor.transform, goal.transform, flow, arrow);
+            if (layout.tutorial) systems.AddComponent<TutorialGuide>().Configure(flow, motor, map);
             if (!EditorSceneManager.SaveScene(scene, ScenePath(layout.key)))
                 throw new IOException("Could not save " + layout.key + ". Stop and inspect the Console before rebuilding.");
         }

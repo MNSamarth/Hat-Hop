@@ -1,4 +1,8 @@
-# Hat Hop Unity Development Guide
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
+> Current release: see [Leap of Faith release](THE_LAST_TRICK_RELEASE.md). The title, four-level progression, Prologue and redesigned Hard in that guide supersede the three-level descriptions below.
+
+# Leap of Faith Unity Development Guide
 
 Working reference for USC CSCI 526. Updated September 25, 2026.
 
@@ -41,7 +45,7 @@ Numerical values remain tuning choices. Do not silently restore the obsolete aut
 
 The user's local project contains Editor-generated settings and scenes. The authoring workspace contains source scaffolding and does not automatically mirror those local files or the latest GitHub commits. Inspect a current checkout before a merge or scene replacement. Do not fabricate project settings or claim Unity testing from static source inspection.
 
-For the current revision, follow MOVEMENT_CAMERA_UPDATE.md: import the patch, open GameplayTest, use Hat Hop > Apply Movement and Camera Update outside Play Mode, and save. Preserve existing .meta files when replacing scripts. Do not recreate the project or regenerate a customized scene.
+For the current revision, follow MOVEMENT_CAMERA_UPDATE.md: import the patch, open GameplayTest, use Leap of Faith > Apply Movement and Camera Update outside Play Mode, and save. Preserve existing .meta files when replacing scripts. Do not recreate the project or regenerate a customized scene.
 
 ## 4. Scene architecture
 
@@ -87,7 +91,7 @@ The camera follows the player root, never Visual. Halving orthographic size give
 
 ## 7. Three-level design plan
 
-The first larger layouts are authored in Assets/HatHop/Editor/LevelData/ThreeLevels.json. ThreeLevelSceneBuilder generates complete Easy, Medium and Hard scenes plus MainMenu through **Hat Hop > Create Menu and Three Levels**. Refer to STARS_AND_PLATFORM_CHALLENGES.md for current integration and tests. Earlier milestone documents are historical.
+The first larger layouts are authored in Assets/HatHop/Editor/LevelData/ThreeLevels.json. ThreeLevelSceneBuilder generates complete Easy, Medium and Hard scenes plus MainMenu through **Leap of Faith > Create Menu and Three Levels**. Refer to STARS_AND_PLATFORM_CHALLENGES.md for current integration and tests. Earlier milestone documents are historical.
 
 | Level | Room size / route landings | Learning or challenge |
 | --- | --- | --- |

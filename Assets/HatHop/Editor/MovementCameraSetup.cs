@@ -9,7 +9,7 @@ namespace HatHop.Editor
 {
     public static class MovementCameraSetup
     {
-        [MenuItem("Hat Hop/Apply Movement and Camera Update")]
+        [MenuItem("Leap of Faith/Apply Movement and Camera Update")]
         public static void Apply()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
@@ -22,7 +22,7 @@ namespace HatHop.Editor
             List<PlayerMotor2D> players = FindInScene<PlayerMotor2D>(scene);
             if (players.Count != 1)
             {
-                Debug.LogError("Open a Hat Hop scene with exactly one PlayerMotor2D, such as GameplayTest.");
+                Debug.LogError("Open a Leap of Faith scene with exactly one PlayerMotor2D, such as GameplayTest.");
                 return;
             }
             PlayerMotor2D motor = players[0];
@@ -60,7 +60,7 @@ namespace HatHop.Editor
 
             Undo.IncrementCurrentGroup();
             int group = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName("Apply Hat Hop movement and camera");
+            Undo.SetCurrentGroupName("Apply Leap of Faith movement and camera");
             if (visual == null)
             {
                 GameObject child = new GameObject("Visual");
