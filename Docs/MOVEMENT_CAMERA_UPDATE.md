@@ -1,3 +1,5 @@
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
 # Movement and Camera Revision
 
 Target: Unity 6000.3.23f1, 2D Built-In. Source prepared; Unity compilation and playtesting pending.
@@ -14,7 +16,7 @@ This guide and the updated Development Guide supersede the old hopping rules in 
 2. Close Unity. Extract Hat_Hop_Movement_Camera_Update.zip and merge Assets and Docs into the project root.
 3. Allow replacement of PlayerMotor2D.cs, GameplayHUD.cs, RotationTestHUD.cs, Hat_Hop_Development_Guide.md, PROGRESS.md and README.md. Keep the existing .meta files for replaced scripts. If you edited these documents locally, preserve those notes before replacing it. Other files in the patch are new. No scene files, .git directory, packages or ProjectSettings are included.
 4. Reopen Unity and open the existing GameplayTest scene. Wait for compilation to finish.
-5. Choose **Hat Hop > Apply Movement and Camera Update**, then Apply in the dialog. Run it outside Play Mode. It changes the open scene, preserving platform layout and gameplay references.
+5. Choose **Leap of Faith > Apply Movement and Camera Update**, then Apply in the dialog. Run it outside Play Mode. It changes the open scene, preserving platform layout and gameplay references.
 6. Save with Ctrl+S. Press Play, then click the Game view.
 
 Do not regenerate GameplayTest from the original generator: that would replace your configured scene. For any newly generated scene, run Apply Movement and Camera Update again. Applying it repeatedly to the same configured scene reuses components and the original camera size; it does not repeatedly halve the view.

@@ -472,10 +472,10 @@
     },
     {
       "key": "Hard",
-      "title": "THE LAST ACT",
+      "title": "BREAK THE ILLUSION",
       "sections": 7,
-      "roomWidth": 20,
-      "roomHeight": 44.34,
+      "roomWidth": 24,
+      "roomHeight": 43,
       "traversalSeconds": 3.0,
       "warningSeconds": 1.0,
       "accent": [
@@ -485,338 +485,442 @@
       ],
       "platforms": [
         {
-          "name": "Start",
-          "x": -4.5,
-          "y": -19.67,
-          "width": 2.45,
+          "name": "Landing 00",
+          "x": -5.8,
+          "y": -18,
+          "width": 3,
           "height": 0.28
         },
         {
           "name": "Landing 01",
-          "x": -1.5,
-          "y": -18.36,
-          "width": 1.75,
+          "x": -2.9,
+          "y": -16.9,
+          "width": 1.9,
           "height": 0.28
         },
         {
           "name": "Landing 02",
-          "x": 1.5,
-          "y": -17.11,
-          "width": 1.65,
+          "x": 0.1,
+          "y": -15.55,
+          "width": 1.45,
           "height": 0.28
         },
         {
           "name": "Landing 03",
-          "x": 4.5,
-          "y": -15.83,
-          "width": 1.75,
-          "height": 0.28,
-          "redUnderside": true
+          "x": 2.4,
+          "y": -14.2,
+          "width": 2.3,
+          "height": 0.28
         },
         {
           "name": "Landing 04",
-          "x": 1.5,
-          "y": -14.55,
-          "width": 2.45,
+          "x": 5.5,
+          "y": -13.45,
+          "width": 2.4,
           "height": 0.28
         },
         {
           "name": "Landing 05",
-          "x": -1.5,
-          "y": -13.24,
-          "width": 1.75,
+          "x": 3.8,
+          "y": -12.1,
+          "width": 1.45,
           "height": 0.28
         },
         {
           "name": "Landing 06",
-          "x": -4.5,
-          "y": -11.99,
-          "width": 1.65,
+          "x": 0.8,
+          "y": -10.95,
+          "width": 2,
           "height": 0.28
         },
         {
           "name": "Landing 07",
-          "x": -1.5,
-          "y": -10.71,
-          "width": 1.75,
+          "x": -2.1,
+          "y": -9.65,
+          "width": 1.65,
           "height": 0.28
         },
         {
           "name": "Landing 08",
-          "x": 1.5,
-          "y": -9.43,
+          "x": -4.8,
+          "y": -8.65,
           "width": 4.6,
           "height": 0.28,
           "seesaw": true
         },
         {
           "name": "Landing 09",
-          "x": 4.5,
-          "y": -7.43,
+          "x": -8.1,
+          "y": -6.65,
           "width": 1.75,
           "height": 0.28
         },
         {
           "name": "Landing 10",
-          "x": 1.5,
-          "y": -6.18,
-          "width": 1.65,
+          "x": -4.6,
+          "y": -5.4,
+          "width": 2.2,
           "height": 0.28
         },
         {
           "name": "Landing 11",
-          "x": -1.5,
-          "y": -4.9,
-          "width": 1.75,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 12",
-          "x": -4.5,
-          "y": -3.62,
-          "width": 2.45,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 13",
-          "x": -1.5,
-          "y": -2.31,
-          "width": 1.75,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 14",
-          "x": 1.5,
-          "y": -1.06,
-          "width": 1.65,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 15",
-          "x": 4.5,
-          "y": 0.22,
-          "width": 1.75,
+          "x": -1.4,
+          "y": -4.1,
+          "width": 1.5,
           "height": 0.28,
           "redUnderside": true
         },
         {
+          "name": "Landing 12",
+          "x": 1.7,
+          "y": -3,
+          "width": 2.5,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 13",
+          "x": 4.5,
+          "y": -3.75,
+          "width": 1.5,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 14",
+          "x": 6.7,
+          "y": -2.35,
+          "width": 1.5,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 15",
+          "x": 4.1,
+          "y": -0.95,
+          "width": 1.7,
+          "height": 0.28
+        },
+        {
           "name": "Landing 16",
-          "x": 1.5,
-          "y": 1.5,
-          "width": 2.45,
+          "x": 1.2,
+          "y": 0.25,
+          "width": 2.6,
           "height": 0.28
         },
         {
           "name": "Landing 17",
-          "x": -1.5,
-          "y": 2.81,
-          "width": 1.75,
-          "height": 0.28
+          "x": -1.7,
+          "y": 1.6,
+          "width": 1.4,
+          "height": 0.28,
+          "redUnderside": true
         },
         {
           "name": "Landing 18",
           "x": -4.5,
-          "y": 4.06,
-          "width": 1.65,
+          "y": 2.8,
+          "width": 2.2,
           "height": 0.28
         },
         {
           "name": "Landing 19",
-          "x": -1.5,
-          "y": 5.34,
-          "width": 1.75,
+          "x": -6.8,
+          "y": 4,
+          "width": 1.65,
           "height": 0.28
         },
         {
           "name": "Landing 20",
-          "x": 1.5,
-          "y": 6.62,
+          "x": -4.4,
+          "y": 5.25,
           "width": 4.6,
           "height": 0.28,
           "seesaw": true
         },
         {
           "name": "Landing 21",
-          "x": 4.5,
-          "y": 8.62,
-          "width": 1.75,
+          "x": -1.4,
+          "y": 7.25,
+          "width": 1.5,
           "height": 0.28
         },
         {
           "name": "Landing 22",
-          "x": 1.5,
-          "y": 9.87,
-          "width": 1.65,
+          "x": 1.8,
+          "y": 8.35,
+          "width": 1.4,
           "height": 0.28
         },
         {
           "name": "Landing 23",
-          "x": -1.5,
-          "y": 11.15,
-          "width": 1.75,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 24",
-          "x": -4.5,
-          "y": 12.43,
-          "width": 2.45,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 25",
-          "x": -1.5,
-          "y": 13.74,
-          "width": 1.75,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 26",
-          "x": 1.5,
-          "y": 14.99,
+          "x": 4.65,
+          "y": 9.7,
           "width": 1.65,
-          "height": 0.28
-        },
-        {
-          "name": "Landing 27",
-          "x": 4.5,
-          "y": 16.27,
-          "width": 1.75,
           "height": 0.28,
           "redUnderside": true
         },
         {
+          "name": "Landing 24",
+          "x": 6.9,
+          "y": 10.9,
+          "width": 2,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 25",
+          "x": 4.8,
+          "y": 12.2,
+          "width": 1.3,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 26",
+          "x": 1.8,
+          "y": 13.4,
+          "width": 1.5,
+          "height": 0.28
+        },
+        {
+          "name": "Landing 27",
+          "x": -1.1,
+          "y": 14.65,
+          "width": 2.2,
+          "height": 0.28
+        },
+        {
           "name": "Landing 28",
-          "x": 1.5,
-          "y": 17.55,
-          "width": 2.45,
+          "x": 1.8,
+          "y": 15.8,
+          "width": 1.6,
           "height": 0.28
         }
       ],
       "hazards": [
         {
-          "name": "Edge Hazard 03",
-          "x": 6.15,
-          "y": -15.28,
-          "width": 0.6,
-          "height": 1.45
+          "name": "Crossing Spike",
+          "x": 6.95,
+          "y": -12.7,
+          "width": 0.45,
+          "height": 1.05
         },
         {
-          "name": "Edge Hazard 09",
-          "x": 6.15,
-          "y": -6.88,
-          "width": 0.6,
-          "height": 1.45
+          "name": "Drop Wall",
+          "x": 7.95,
+          "y": -3.0,
+          "width": 0.4,
+          "height": 1.6
         },
         {
-          "name": "Edge Hazard 12",
-          "x": -6.15,
-          "y": -3.07,
-          "width": 0.6,
-          "height": 1.45
-        },
-        {
-          "name": "Edge Hazard 15",
-          "x": 6.15,
-          "y": 0.77,
-          "width": 0.6,
-          "height": 1.45
-        },
-        {
-          "name": "Edge Hazard 21",
-          "x": 6.15,
-          "y": 9.17,
-          "width": 0.6,
-          "height": 1.45
-        },
-        {
-          "name": "Edge Hazard 24",
-          "x": -6.15,
-          "y": 12.98,
-          "width": 0.6,
-          "height": 1.45
+          "name": "Upper Edge Spike",
+          "x": 8.5,
+          "y": 11.4,
+          "width": 0.4,
+          "height": 1.15
         }
       ],
-      "exitX": 5.2,
-      "exitFloorY": 18.67,
+      "exitX": 5.1,
+      "exitFloorY": 16.9,
       "exitWidth": 2.4,
       "exitHeight": 2.4,
       "pockets": [
         {
           "name": "Flip Star Pocket 1",
-          "anchor": 6,
-          "x": -7.1,
-          "y": -11.09,
+          "anchor": 4,
+          "x": 8.5,
+          "y": -12.55,
           "width": 1.4,
-          "height": 3.3
+          "height": 3.3,
+          "rejoin": 2
         },
         {
           "name": "Flip Star Pocket 2",
-          "anchor": 18,
-          "x": -7.1,
-          "y": 4.96,
+          "anchor": 19,
+          "x": -9.8,
+          "y": 4.9,
           "width": 1.4,
-          "height": 3.3
+          "height": 3.3,
+          "rejoin": 18
         }
       ],
       "bonusPlatforms": [
         {
           "name": "Pocket 1 Recovery",
-          "x": -5.45,
-          "y": -14.39,
+          "x": 6.85,
+          "y": -15.85,
           "width": 2.2,
           "height": 0.28
         },
         {
           "name": "Pocket 1 Return Step",
-          "x": -3.0,
-          "y": -13.39,
-          "width": 1.4,
+          "x": 3,
+          "y": -16.95,
+          "width": 2.6,
           "height": 0.28
         },
         {
           "name": "Pocket 2 Recovery",
-          "x": -5.45,
-          "y": 1.66,
+          "x": -8.15,
+          "y": 1.6,
           "width": 2.2,
           "height": 0.28
         },
         {
           "name": "Pocket 2 Return Step",
-          "x": -3.0,
-          "y": 2.66,
-          "width": 1.4,
+          "x": -6.2,
+          "y": 1.4,
+          "width": 1.8,
           "height": 0.28
+        },
+        {
+          "name": "Lower Rigging Divider",
+          "x": 0,
+          "y": -8,
+          "width": 0.35,
+          "height": 2
+        },
+        {
+          "name": "Upper Hanging Screen",
+          "x": -2,
+          "y": 10,
+          "width": 0.35,
+          "height": 3
+        },
+        {
+          "name": "Side Chamber Wall",
+          "x": 4.3,
+          "y": 4,
+          "width": 0.35,
+          "height": 3
         }
       ],
       "stars": [
         {
-          "name": "Route Star 1",
-          "x": -1.5,
-          "y": -17.56
+          "name": "Crossing Star",
+          "x": 0.1,
+          "y": -14.75
         },
         {
-          "name": "Route Star 2",
-          "x": -1.5,
-          "y": -1.51
+          "name": "Commitment Star",
+          "x": 6.7,
+          "y": -1.55
         },
         {
           "name": "Flip Star 1",
-          "x": -7.1,
-          "y": -8.34
+          "x": 8.5,
+          "y": -9.8
         },
         {
           "name": "Flip Star 2",
-          "x": -7.1,
-          "y": 7.71
+          "x": -9.8,
+          "y": 7.65
         },
         {
           "name": "Raised Tip Star",
-          "x": 4.5,
-          "y": 9.42
+          "x": -1.4,
+          "y": 8.05
         }
       ],
       "turnSeconds": 0.3
+    },
+    {
+      "key": "Prologue",
+      "title": "BEHIND THE CURTAIN",
+      "sections": 2,
+      "roomWidth": 14,
+      "roomHeight": 14,
+      "traversalSeconds": 8,
+      "warningSeconds": 2,
+      "turnSeconds": 0.6,
+      "accent": [
+        0.3,
+        0.85,
+        0.65
+      ],
+      "tutorial": true,
+      "platforms": [
+        {
+          "name": "First Steps",
+          "x": -3.5,
+          "y": -4.5,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "First Jump",
+          "x": 0,
+          "y": -3.25,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "First Star",
+          "x": 3.5,
+          "y": -2,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Turn Practice",
+          "x": 0,
+          "y": -0.75,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Follow the Arrow",
+          "x": -3.5,
+          "y": 0.5,
+          "width": 2.8,
+          "height": 0.28
+        },
+        {
+          "name": "Exit Approach",
+          "x": 0,
+          "y": 1.75,
+          "width": 2.8,
+          "height": 0.28
+        }
+      ],
+      "hazards": [],
+      "pockets": [],
+      "bonusPlatforms": [
+        {
+          "name": "Recovery Floor",
+          "x": 0,
+          "y": -5.65,
+          "width": 13.4,
+          "height": 0.28
+        }
+      ],
+      "exitX": 3.1,
+      "exitFloorY": 3,
+      "exitWidth": 2.4,
+      "exitHeight": 2.4,
+      "stars": [
+        {
+          "name": "Lesson Star 1",
+          "x": 0,
+          "y": -2.45
+        },
+        {
+          "name": "Lesson Star 2",
+          "x": 3.5,
+          "y": -1.2
+        },
+        {
+          "name": "Lesson Star 3",
+          "x": 0,
+          "y": 0.05
+        },
+        {
+          "name": "Lesson Star 4",
+          "x": -3.5,
+          "y": 1.3
+        },
+        {
+          "name": "Lesson Star 5",
+          "x": 0,
+          "y": 2.55
+        }
+      ]
     }
   ]
 }

@@ -23,7 +23,7 @@ namespace HatHop.Editor
         private static readonly Color Gold = new Color(1f, 0.76f, 0.34f);
         private static Font font;
 
-        [MenuItem("Hat Hop/Create Main Menu Scene")]
+        [MenuItem("Leap of Faith/Create Main Menu Scene")]
         public static void Create()
         {
             Build(true);
@@ -36,7 +36,7 @@ namespace HatHop.Editor
                 Debug.LogWarning("Stop Play Mode before creating a menu scene.");
                 return false;
             }
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return false;
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return false;
             if (confirmReplace && File.Exists(SceneNavigation.MenuScenePath) && !EditorUtility.DisplayDialog("Replace main menu?",
                 "This replaces MainMenu.unity. Your gameplay scenes and level mappings are preserved.", "Replace", "Cancel")) return false;
             Directory.CreateDirectory("Assets/HatHop/Scenes");
@@ -48,6 +48,7 @@ namespace HatHop.Editor
                 catalog = ScriptableObject.CreateInstance<LevelCatalog>();
                 AssetDatabase.CreateAsset(catalog, CatalogPath);
             }
+            PlayerSettings.productName = "Leap of Faith";
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             Camera camera = new GameObject("Main Camera").AddComponent<Camera>();
@@ -70,51 +71,40 @@ namespace HatHop.Editor
             stage.anchorMin = stage.anchorMax = stage.pivot = new Vector2(0.5f, 0.5f);
             stage.anchoredPosition = Vector2.zero;
 
-            Box("Accent", stage, 40, 42, 48, 5, Gold);
-            Label("Eyebrow", stage, "A WORLD THAT WON'T STAY STILL", 40, 70, 480, 30, 17, Gold);
-            Label("Title", stage, "HAT HOP", 34, 105, 525, 95, 78, White, true);
-            Label("Tagline", stage, "Find your footing.\nEscape the next flip.", 40, 205, 460, 86, 29, Muted);
-
-            // Self-created silhouette made from UI rectangles; no imported art.
+            Box("Accent", stage, 40, 70, 48, 5, Gold);
+            Label("Title", stage, "LEAP OF\nFAITH", 34, 112, 525, 145, 62, White, true);
+            // Abstract platforms and a square player; no character or narrative art.
             Box("Lower Platform", stage, 42, 504, 170, 9, Muted);
-            Box("Upper Platform", stage, 322, 358, 165, 9, Muted);
-            RectTransform mascot = Rect("Hopping Rabbit", stage, 116, 404, 74, 100);
-            Box("Body", mascot, 0, 40, 74, 60, Cyan);
-            Box("Left Ear", mascot, 8, 0, 17, 48, Cyan);
-            Box("Right Ear", mascot, 47, 7, 17, 41, Cyan);
-            Box("Eye", mascot, 53, 53, 7, 7, Ink);
-            Box("Hat Crown", stage, 364, 291, 76, 60, White);
-            Box("Hat Band", stage, 364, 327, 76, 12, Gold);
-            Box("Hat Brim", stage, 348, 343, 108, 9, White);
-            Label("Footer", stage, "JUMP  /  ADAPT  /  ESCAPE", 40, 559, 470, 28, 16, Muted);
+            Box("Middle Platform", stage, 210, 426, 124, 9, Muted);
+            Box("Upper Platform", stage, 354, 348, 132, 9, Muted);
+            Box("Player Square", stage, 112, 462, 30, 38, Cyan);
+            RectTransform mascot = null;
             Box("Card", stage, 580, 40, 480, 545, Panel);
 
             RectTransform home = Rect("Home", stage, 610, 69, 420, 454);
-            Label("Heading", home, "TAKE THE LEAP", 0, 0, 420, 45, 29, White, true);
-            Label("Description", home, "A small rabbit. A shifting world.", 0, 53, 420, 38, 19, Muted);
-            Button play = MakeButton(home, "Play", "PLAY", 115, Cyan, Ink);
+            Label("Heading", home, "PLAY", 0, 0, 420, 45, 29, White, true);
+            Button play = MakeButton(home, "Play", "START", 115, Cyan, Ink);
             Button levels = MakeButton(home, "Level Select", "LEVEL SELECT", 203, new Color(0.16f, 0.2f, 0.29f), White);
             Button controls = MakeButton(home, "Controls", "CONTROLS", 291, new Color(0.16f, 0.2f, 0.29f), White);
-            Label("Hint", home, "Watch the warning. Prepare your landing.", 0, 387, 420, 48, 17, Muted);
 
             RectTransform selection = Rect("Level Select", stage, 610, 69, 420, 454);
-            Label("Heading", selection, "CHOOSE YOUR CHALLENGE", 0, 0, 420, 45, 26, White, true);
-            Label("Description", selection, "Three ways out. One shifting world.", 0, 49, 420, 38, 18, Muted);
-            Button easy = MakeButton(selection, "Easy", "EASY   /   COMING SOON", 105, new Color(0.16f, 0.2f, 0.29f), White);
-            Button medium = MakeButton(selection, "Medium", "MEDIUM   /   COMING SOON", 187, new Color(0.16f, 0.2f, 0.29f), White);
-            Button hard = MakeButton(selection, "Hard", "HARD   /   COMING SOON", 269, new Color(0.16f, 0.2f, 0.29f), White);
-            Button levelsBack = MakeButton(selection, "Back", "BACK", 370, new Color(0.16f, 0.2f, 0.29f), White);
+            Label("Heading", selection, "LEVEL SELECT", 0, 0, 420, 45, 26, White, true);
+            Button prologue = MakeButton(selection, "Prologue", "BEGINNER", 92, Cyan, Ink);
+            Button easy = MakeButton(selection, "Easy", "EASY   /   COMING SOON", 167, new Color(0.16f, 0.2f, 0.29f), White);
+            Button medium = MakeButton(selection, "Medium", "MEDIUM   /   COMING SOON", 242, new Color(0.16f, 0.2f, 0.29f), White);
+            Button hard = MakeButton(selection, "Hard", "HARD   /   COMING SOON", 317, new Color(0.16f, 0.2f, 0.29f), White);
+            Button levelsBack = MakeButton(selection, "Back", "BACK", 392, new Color(0.16f, 0.2f, 0.29f), White);
 
             RectTransform help = Rect("Controls", stage, 610, 69, 420, 454);
-            Label("Heading", help, "FIND YOUR FOOTING", 0, 0, 420, 45, 28, White, true);
-            Label("Keys", help, "A / D      Move left / right\nSPACE    Jump\nR             Restart the run", 0, 70, 420, 117, 22, White);
-            Label("Rules", help, "Collect stars for a 0-5 rating.\nGreen: exit. Red faces: danger.\nWatch warnings before each flip.\nFlip to enter golden star pockets.\nHard: weight an end, cross the seesaw,\nthen jump from its raised tip.", 0, 207, 420, 151, 19, Muted);
-            Button controlsBack = MakeButton(help, "Back", "BACK", 370, new Color(0.16f, 0.2f, 0.29f), White);
+            Label("Heading", help, "CONTROLS", 0, 0, 420, 45, 28, White, true);
+            Label("Keys", help, "A / D or LEFT / RIGHT    Move\nSPACE or UP                    Jump\nR                                        Restart", 0, 70, 420, 117, 22, White);
+            Label("Rules", help, "Collect stars for a 0-5 rating.\nGreen: exit. Red faces: danger.\nWatch warnings before each flip.\nFlip to enter golden star pockets.\nHard: light both outer pads to open exit.\nUse raised seesaw tips to climb.", 0, 207, 420, 151, 19, Muted);
+            Button controlsBack = MakeButton(help, "Back", "BACK", 392, new Color(0.16f, 0.2f, 0.29f), White);
             Text status = Label("Status", stage, "", 610, 535, 420, 40, 17, Gold);
 
             MainMenuController controller = canvasObject.AddComponent<MainMenuController>();
             controller.Configure(catalog, home.gameObject, selection.gameObject, help.gameObject,
-                play, levels, controls, easy, medium, hard, levelsBack, controlsBack, status, mascot);
+                play, levels, controls, easy, medium, hard, prologue, levelsBack, controlsBack, status, mascot);
             selection.gameObject.SetActive(false);
             help.gameObject.SetActive(false);
             GameObject events = new GameObject("EventSystem", typeof(EventSystem));
@@ -128,12 +118,12 @@ namespace HatHop.Editor
             RefreshBuildScenes();
             AssetDatabase.SaveAssets();
             Selection.activeGameObject = canvasObject;
-            Debug.Log("MainMenu saved. Play opens Easy when mapped, otherwise GameplayTest. " +
+            Debug.Log("MainMenu saved. Play opens Prologue when mapped, otherwise Easy or GameplayTest. " +
                 "Open Build Profiles and verify MainMenu is first if your active profile overrides the global scene list.");
             return true;
         }
 
-        [MenuItem("Hat Hop/Refresh Menu Build Scenes")]
+        [MenuItem("Leap of Faith/Refresh Menu Build Scenes")]
         public static void RefreshBuildScenes()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
@@ -150,6 +140,7 @@ namespace HatHop.Editor
             List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>();
             HashSet<string> added = new HashSet<string>();
             AddScene(scenes, added, SceneNavigation.MenuScenePath);
+            AddScene(scenes, added, catalog.prologueScenePath);
             AddScene(scenes, added, catalog.easyScenePath);
             AddScene(scenes, added, catalog.mediumScenePath);
             AddScene(scenes, added, catalog.hardScenePath);
@@ -166,7 +157,7 @@ namespace HatHop.Editor
             if (string.IsNullOrEmpty(path)) return;
             if (!File.Exists(path))
             {
-                Debug.LogWarning("Hat Hop: mapped scene does not exist: " + path);
+                Debug.LogWarning("Leap of Faith: mapped scene does not exist: " + path);
                 return;
             }
             if (added.Add(path)) scenes.Add(new EditorBuildSettingsScene(path, true));

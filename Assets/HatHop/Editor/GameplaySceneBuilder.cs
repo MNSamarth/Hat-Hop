@@ -11,7 +11,7 @@ namespace HatHop.Editor
         private const string Root = "Assets/HatHop";
         private const string ScenePath = Root + "/Scenes/GameplayTest.unity";
 
-        [MenuItem("Hat Hop/Create Gameplay Test Scene")]
+        [MenuItem("Leap of Faith/Create Gameplay Test Scene")]
         public static void Create()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)

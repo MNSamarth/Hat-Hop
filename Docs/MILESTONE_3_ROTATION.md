@@ -1,3 +1,5 @@
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
 # Milestone 3 Rotation Test
 
 Target Editor: Unity 6000.3.23f1, 2D Built-In Render Pipeline.
@@ -13,7 +15,7 @@ The user has imported the movement starter and pushed project foundation to MNSa
 2. Run `git switch -c feature/world-rotation` from the current branch containing the working movement revision. Do not switch to an older main branch first.
 3. Close Unity. Extract Hat_Hop_Rotation_Milestone.zip and copy its Assets and Docs folders into the project root, merging folders. This patch contains three new scripts, their metadata, and this note. It does not contain a .git folder, existing scenes, ProjectSettings, packages or a replacement motor.
 4. Reopen Unity and allow compilation. If any Console error appears, report its complete text before continuing.
-5. Choose Hat Hop > Create Rotation Test Scene. If prompted, save the currently open scene. The tool saves Assets/HatHop/Scenes/RotationTest.unity and creates its own RotationSquare sprite. It asks before replacing an existing RotationTest scene.
+5. Choose Leap of Faith > Create Rotation Test Scene. If prompted, save the currently open scene. The tool saves Assets/HatHop/Scenes/RotationTest.unity and creates its own RotationSquare sprite. It asks before replacing an existing RotationTest scene.
 6. Enter Play Mode and click the Game view. Use a landscape Game view, preferably 16:9. A/D steers, Space queues a big jump and R resets the entire test room.
 
 ## What should happen

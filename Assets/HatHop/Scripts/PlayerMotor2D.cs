@@ -34,16 +34,18 @@ namespace HatHop
 #if ENABLE_INPUT_SYSTEM
             Keyboard keyboard = Keyboard.current;
             steer = keyboard == null ? 0 :
-                (keyboard.dKey.isPressed ? 1 : 0) - (keyboard.aKey.isPressed ? 1 : 0);
-            bool jumpPressed = keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
+                ((keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) ? 1 : 0) -
+                ((keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) ? 1 : 0);
+            bool jumpPressed = keyboard != null && (keyboard.spaceKey.wasPressedThisFrame || keyboard.upArrowKey.wasPressedThisFrame);
 #elif ENABLE_LEGACY_INPUT_MANAGER
-            steer = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
-            bool jumpPressed = Input.GetKeyDown(KeyCode.Space);
+            steer = ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) ? 1 : 0) -
+                ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) ? 1 : 0);
+            bool jumpPressed = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow);
 #else
             steer = 0;
             bool jumpPressed = false;
 #endif
-            // Only a fresh press requests a jump. Holding Space never repeats it.
+            // Only a fresh press requests a jump. Holding Space or Up never repeats it.
             if (jumpPressed) jumpExpiresAt = Time.time + jumpBufferSeconds;
         }
 

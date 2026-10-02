@@ -48,7 +48,7 @@ namespace HatHop
         }
         public void SaveCompletedRun()
         {
-            if (levelIndex < 0 || levelIndex > 2) return;
+            if (levelIndex < 0 || levelIndex > 3) return;
             if (Collected > Best) PlayerPrefs.SetInt(Key(levelIndex), Mathf.Clamp(Collected, 0, 5));
             PlayerPrefs.SetInt("HatHop.Completed.v1." + levelIndex, 1);
             PlayerPrefs.Save();

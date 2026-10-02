@@ -1,9 +1,11 @@
-# Hat Hop: menu and three levels
+> Historical milestone. Current setup, timing, title and presentation: [Leap of Faith update](LEAP_OF_FAITH_UPDATE.md).
+
+# Leap of Faith: menu and three levels
 
 **Current update:** use STARS_AND_PLATFORM_CHALLENGES.md and its combined ZIP. This file records the earlier milestone; the latest JSON and challenge guide define current layouts and scoring.
 
 
-Combined milestone for Unity 6000.3.23f1, 2D Built-In. Apply this ZIP to the existing Hat Hop project with the tested grounded movement/camera update. It includes the entire main-menu patch, so the separate menu ZIP is not needed.
+Combined milestone for Unity 6000.3.23f1, 2D Built-In. Apply this ZIP to the existing Leap of Faith project with the tested grounded movement/camera update. It includes the entire main-menu patch, so the separate menu ZIP is not needed.
 
 ## What is included
 
@@ -26,7 +28,7 @@ The green exit is inside a side alcove bounded by a solid floor, roof and back w
 1. Stop Play Mode and save your existing scene. Work from the tested movement/camera checkpoint. Use your existing feature/main-menu branch if already created, or create `feature/menu-levels` from that checkpoint. Review `git status` before importing; save any unrelated work first.
 2. Extract **Hat_Hop_Menu_And_Three_Levels.zip** outside the project. Copy **Assets**, **Docs**, **Tools** and **README.md** into the Unity project root. Merge folders and replace the supplied files. You do not need the earlier menu ZIP. Existing gameplay scripts outside the menu/HUD changes and the current test scenes are not replaced. No .git, Packages, ProjectSettings or generated .unity files are shipped.
 3. Return to Unity and wait for compilation. The menu uses the Unity UI package (com.unity.ugui) and the existing input backend. If there are red Console errors, copy the first complete error before running the generator.
-4. Choose **Hat Hop > Create Menu and Three Levels**. This generates and saves MainMenu, Easy, Medium and Hard; creates the level art/material/catalog; assigns all references; and opens MainMenu. Do not run the older individual test-scene generators or Apply Movement and Camera Update on these newly generated levels; the combined tool already wires the player and camera.
+4. Choose **Leap of Faith > Create Menu and Three Levels**. This generates and saves MainMenu, Easy, Medium and Hard; creates the level art/material/catalog; assigns all references; and opens MainMenu. Do not run the older individual test-scene generators or Apply Movement and Camera Update on these newly generated levels; the combined tool already wires the player and camera.
 5. Open **File > Build Profiles > Scene List**. The global list will begin MainMenu, Easy, Medium, Hard, with GameplayTest included if present. Check that those first four scenes are enabled. If your active profile has **Override Global Scene List**, update that profile's list too. Keep MainMenu first.
 6. Press Play from MainMenu and test the flows below. Save any later tuning outside Play Mode.
 

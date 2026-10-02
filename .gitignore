@@ -24,3 +24,5 @@ Thumbs.db
 .env
 .env.*
 *.slnx
+__pycache__/
+*.pyc

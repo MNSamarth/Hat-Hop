@@ -23,7 +23,7 @@ namespace HatHop
             if (!CanLoad(path))
             {
                 error = "This destination is unavailable. Please try another level.";
-                Debug.LogWarning("Hat Hop: destination missing from enabled build scenes: " + path);
+                Debug.LogWarning("Leap of Faith: destination missing from enabled build scenes: " + path);
                 return false;
             }
             IsLoading = true;

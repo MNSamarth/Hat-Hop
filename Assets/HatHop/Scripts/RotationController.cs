@@ -14,8 +14,8 @@ namespace HatHop
         [SerializeField] private Transform mapRoot;
         [SerializeField] private PlayerMotor2D player;
         [SerializeField] private bool managedByLevel;
-        [SerializeField, Min(0.1f)] private float traversalSeconds = 6f;
-        [SerializeField, Min(0.1f)] private float warningSeconds = 2f;
+        [SerializeField, Min(0.1f)] private float traversalSeconds = 5f;
+        [SerializeField, Min(0.1f)] private float warningSeconds = 1f;
         [SerializeField, Min(0.1f)] private float turnSeconds = 0.6f;
         [SerializeField, Min(1f)] private float resetDistance = 20f;
 
@@ -37,9 +37,13 @@ namespace HatHop
         public event System.Action RoomReset;
         public bool IsInitialized => initialized;
         public bool IsHalted => halted;
+        public bool SchedulePaused { get; private set; }
+        public void SetSchedulePaused(bool paused) => SchedulePaused = paused;
         public Phase CurrentPhase { get; private set; }
         public int CompletedTurns { get; private set; }
         public float WarningRemaining => Mathf.Max(0f, warningSeconds - elapsed);
+        public float SecondsUntilTurn => CurrentPhase == Phase.Turning ? 0f :
+            CurrentPhase == Phase.Warning ? WarningRemaining : Mathf.Max(0f, traversalSeconds - elapsed) + warningSeconds;
         public float UntilWarning => Mathf.Max(0f, traversalSeconds - elapsed);
 
         // Called only by the Editor scene builder; Inspector references are serialized.
@@ -114,6 +118,7 @@ namespace HatHop
                 return;
             }
 
+            if (SchedulePaused && CurrentPhase == Phase.Traversal) return;
             elapsed += Time.fixedDeltaTime;
             switch (CurrentPhase)
             {

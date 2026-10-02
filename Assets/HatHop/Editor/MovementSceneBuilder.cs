@@ -11,7 +11,7 @@ namespace HatHop.Editor
         private const string Root = "Assets/HatHop";
         private const string ScenePath = Root + "/Scenes/MovementTest.unity";
 
-        [MenuItem("Hat Hop/Create Movement Test Scene")]
+        [MenuItem("Leap of Faith/Create Movement Test Scene")]
         public static void Create()
         {
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
