@@ -1,4 +1,4 @@
-# Hat Hop
+# Leap of Faith
 
 A Unity 2D platformer where warned 180-degree world rotations turn upward climbs into dangerous descents. Developed for USC CSCI 526.
 
